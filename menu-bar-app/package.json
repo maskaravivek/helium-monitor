@@ -2,13 +2,48 @@
   "name": "helium-monitor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "myApp.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "install-app-deps",
+    "start": "npm install && electron ./app",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.maskaravivek.heliummonitor",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "menubar": "^9.0.4"
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "^22.10.5"
   }
 }
