@@ -1,0 +1,23 @@
+alembic==1.4.2
+certifi==2019.11.28
+cffi==1.14.0
+click==7.1.1
+Flask==1.0.2
+Flask-Cors==3.0.8
+Flask-Migrate==2.5.3
+Flask-Script==2.0.6
+Flask-SQLAlchemy==2.4.1
+sqlalchemy < 1.4.0
+itsdangerous==1.1.0
+psycopg2-binary==2.8.4
+pycparser==2.20
+PyJWT==1.7.1
+python-dateutil==2.8.1
+sentry-sdk[flask]==0.14.3
+sendgrid==6.2.1
+argon2-cffi==19.2.0
+nose2==0.9.2
+Flask-Caching==1.8.0
+sqlalchemy-utils==0.36.3
+boto3==1.16.61
+Jinja2==2.11.3
