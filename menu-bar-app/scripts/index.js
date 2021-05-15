@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-    fetch('http://127.0.0.1:5000/api/v1/earnings?hotspot_id=11MqWgd3Hn3HMnJt8Mrw1QFjZqcCh1febgUNk4YaDEjm5fQXAmQ')
+    fetch('https://helium-monitor.herokuapp.com/api/v1/earnings?hotspot_id=11MqWgd3Hn3HMnJt8Mrw1QFjZqcCh1febgUNk4YaDEjm5fQXAmQ')
         .then(response => response.json())
         .then(data => {
             let latest = document.getElementById('latest-window')
