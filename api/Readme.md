@@ -51,6 +51,5 @@ Response:
 ## Deployment
 
 ```
-git subtree split --prefix api -b deploy
-git push heroku deploy:master
+git subtree split --prefix api -b deploy && git push heroku deploy:master
 ```
