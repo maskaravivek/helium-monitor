@@ -47,3 +47,10 @@ Response:
   "summary_window": "0.74"
 }
 ```
+
+## Deployment
+
+```
+git subtree split --prefix api -b deploy
+git push heroku deploy:master
+```
