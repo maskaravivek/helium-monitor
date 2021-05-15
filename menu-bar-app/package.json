@@ -2,13 +2,16 @@
   "name": "helium-monitor",
   "version": "1.0.0",
   "description": "",
+  "homepage": "https://github.com/maskaravivek/helium-monitor",
   "main": "myApp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "install-app-deps",
     "start": "npm install && electron ./app",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist-all": "electron-builder -mwl"
+
   },
   "build": {
     "appId": "com.maskaravivek.heliummonitor",
@@ -27,6 +30,8 @@
       ]
     },
     "linux": {
+      "maintainer": "Vivek Maskara",
+      "category": "Utility",
       "target": [
         "AppImage",
         "deb"
@@ -37,7 +42,7 @@
       "icon": "build/icon.ico"
     }
   },
-  "author": "",
+  "author": "Vivek Maskara",
   "license": "ISC",
   "dependencies": {
     "menubar": "^9.0.4",
