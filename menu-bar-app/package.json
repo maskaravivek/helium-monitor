@@ -40,7 +40,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "menubar": "^9.0.4"
+    "menubar": "^9.0.4",
+    "universal-analytics": "^0.4.23"
   },
   "devDependencies": {
     "electron": "latest",

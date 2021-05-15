@@ -14,6 +14,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         displayConfigs();
     });
 
+    document.getElementById('coffee_btn').addEventListener("click", function () {
+        require("shell").openExternal("http://www.google.com")
+    });
+
     document.getElementById('refresh_btn').addEventListener("click", function () {
         displayHotspotEarnings();
     });
@@ -36,6 +40,7 @@ function displayConfigs() {
     let hotspot_id = localStorage.getItem('hotspot_id');
     if (hotspot_id !== undefined && hotspot_id !== null) {
         document.getElementById('hotspot_id').value = localStorage.getItem('hotspot_id');
+        document.getElementById('is_emrit').checked = localStorage.getItem('is_emrit') === "true";
     }
 }
 
