@@ -22,3 +22,4 @@ sqlalchemy-utils==0.36.3
 boto3==1.16.61
 Jinja2==2.11.3
 gunicorn==19.9.0
+requests==2.25.1
