@@ -7,7 +7,7 @@ const mb = menubar({
   icon: path.join(__dirname, 'assets', 'icon.png'),
   browserWindow: {
     width: 440,
-    height: 340
+    height: 400
   },
   tooltip: 'Helium Hotspot Monitor'
 });

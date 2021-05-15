@@ -76,22 +76,22 @@ function displayEarnings(hotspot_id) {
         .then(data => {
             let is_emrit = localStorage.getItem('is_emrit') == "true"
 
-            let latest = document.getElementById('latest-window')
-            latest.innerHTML = is_emrit ? (data['latest_window'] * EMRIT_RATIO).toFixed(2) : data['latest_window']
+            const last_1_hour = is_emrit ? (data['latest_window'] * EMRIT_RATIO).toFixed(2) : data['latest_window'];
+            const last_24_hours = is_emrit ? (data['last_day'] * EMRIT_RATIO).toFixed(2) : data['last_day'];
+            const last_7_days = is_emrit ? (data['7_days_window'] * EMRIT_RATIO).toFixed(2) : data['7_days_window'];
+            const last_30_days = is_emrit ? (data['summary_window'] * EMRIT_RATIO).toFixed(2) : data['summary_window'];
 
-            let last_day = document.getElementById('last-day-window')
-            last_day.innerHTML = is_emrit ? (data['last_day'] * EMRIT_RATIO).toFixed(2) : data['last_day']
-
-            let summary = document.getElementById('summary-window')
-            summary.innerHTML = is_emrit ? (data['summary_window'] * EMRIT_RATIO).toFixed(2) : data['summary_window']
-
-            let earnings = (data['summary_window'] * data['price'])
-
-            if(is_emrit) {
-                earnings *= EMRIT_RATIO
+            if (last_1_hour > 0) {
+                document.getElementById('last-1-hour-hnt').innerHTML = `+ ${last_1_hour} HNT`
             }
 
-            let total_earnings = document.getElementById('total_earnings')
-            total_earnings.innerHTML = `(${earnings.toFixed(2)} $)`
+            document.getElementById('last-day-window-hnt').innerHTML = `${last_24_hours} HNT`
+            document.getElementById('last-day-window-usd').innerHTML = `$ ${(last_24_hours * data['price']).toFixed(2)}`
+
+            document.getElementById('last-7-day-window-hnt').innerHTML = `${last_7_days} HNT`
+            document.getElementById('last-7-day-window-usd').innerHTML = `$ ${(last_7_days * data['price']).toFixed(2)}`
+
+            document.getElementById('summary-window-hnt').innerHTML = `${last_30_days} HNT`
+            document.getElementById('summary-window-usd').innerHTML = `$ ${(last_30_days * data['price']).toFixed(2)}`
         });
 }
