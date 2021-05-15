@@ -63,12 +63,18 @@ def get_hotspot_earnings(hotspot_id, latest_earnings_duration_in_hours=1, summar
     last_day_earnings, summary_earnings = earnings_summary(
         hotspot_id, duration_in_days=summary_duration_in_days)
 
+    price = get_price()
+
     return {
         "latest_window": "%.2f" % last_window_earnings,
         "last_day": "%.2f" % last_day_earnings,
-        "summary_window": "%.2f" % summary_earnings
+        "summary_window": "%.2f" % summary_earnings,
+        'price': price
     }
 
+def get_price():
+    r = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=helium&vs_currencies=usd')
+    return r.json()['helium']['usd']
 
 def send_earning_update_to_telegram(hotspot_id, token, chat_id):
     earnings = get_hotspot_earnings(hotspot_id)
