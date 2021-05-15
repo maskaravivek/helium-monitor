@@ -16,8 +16,11 @@
                     Configure
                 </span>
                 <div>
-                    <span>Enter Hotspot ID: </span><br /><br />
-                    <input class="input is-primary" type="text" id="hotspot_id" name="hotspot_id">
+                    <input placeholder="Enter Hotspot ID" class="input is-primary mt-3" type="text" id="hotspot_id" name="hotspot_id">
+                    <label class="checkbox mt-3">
+                        <input id="is_emrit" type="checkbox">
+                        Its an Emrit device.
+                    </label> <br />
                     <button class="button is-primary mt-3" id='save_btn' type="save" value="save">Save</button>
                 </div>
             </div>
@@ -25,11 +28,16 @@
                 <span class="title">
                     Earnings
                 </span>
-                <span class='ml-6'>
-                    <button id='refresh_btn' class="button">
-                        <img height="24" width="24" src="assets/refresh.png">
+                <span id='total_earnings'>
+
+                </span>
+                <span class='ml-3'>
+                    <button style="height: 56px; width: 64px; padding: 0%; margin: 0%;" id='refresh_btn'
+                        class="button is-loading">
+                        <img id='refresh_btn_icon' height="24" width="24" src="assets/refresh.png">
                     </button>
-                    <button class="button" id='edit_configs'>
+                    <button style="height: 56px; width: 64px; padding: 0%; margin: 0%;" class="button"
+                        id='edit_configs'>
                         <img height="24" width="24" src="assets/settings.png">
                     </button>
                 </span>

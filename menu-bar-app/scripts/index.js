@@ -7,22 +7,54 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.getElementById('edit_configs').addEventListener("click", function () {
-        showConfigsDiv()
+        displayConfigs();
     });
 
     document.getElementById('refresh_btn').addEventListener("click", function () {
-        displayEarnings()
+        displayHotspotEarnings();
     });
 
     let hotspot_id = localStorage.getItem('hotspot_id')
     if (hotspot_id === null || hotspot_id === undefined) {
         showConfigsDiv();
     } else {
-        showEarningsDiv();
-        displayEarnings(hotspot_id)
+        displayHotspotEarnings()
     }
 });
 
+window.addEventListener('focus', (event) => {
+    console.log('focus')
+    displayHotspotEarnings();
+});
+
+function displayConfigs() {
+    showConfigsDiv();
+    let hotspot_id = localStorage.getItem('hotspot_id');
+    if (hotspot_id !== undefined && hotspot_id !== null) {
+        document.getElementById('hotspot_id').value = localStorage.getItem('hotspot_id');
+    }
+}
+
+function showLoadingIndicator(isVisible) {
+    if (isVisible) {
+        document.getElementById('refresh_btn').classList.add("is-loading")
+        document.getElementById('refresh_btn').classList.add("is-info")
+        document.getElementById('refresh_btn_icon').style.display = 'none'
+    } else {
+        document.getElementById('refresh_btn').classList.remove("is-loading")
+        document.getElementById('refresh_btn').classList.remove("is-info")
+        document.getElementById('refresh_btn_icon').style.display = 'block'
+    }
+
+}
+
+function displayHotspotEarnings() {
+    let hotspot_id = localStorage.getItem('hotspot_id');
+    showEarningsDiv();
+    showLoadingIndicator(true)
+    displayEarnings(hotspot_id);
+    setTimeout(function () { showLoadingIndicator(false); }, 300)
+}
 
 function showConfigsDiv() {
     document.getElementById('configs-div').style.display = "block";
@@ -46,5 +78,10 @@ function displayEarnings(hotspot_id) {
 
             let summary = document.getElementById('summary-window')
             summary.innerHTML = data['summary_window']
+
+            let earnings = data['summary_window'] * data['price']
+
+            let total_earnings = document.getElementById('total_earnings')
+            total_earnings.innerHTML = `(${earnings.toFixed(2)} $)`
         });
 }
