@@ -10,6 +10,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         showConfigsDiv()
     });
 
+    document.getElementById('refresh_btn').addEventListener("click", function () {
+        displayEarnings()
+    });
+
     let hotspot_id = localStorage.getItem('hotspot_id')
     if (hotspot_id === null || hotspot_id === undefined) {
         showConfigsDiv();

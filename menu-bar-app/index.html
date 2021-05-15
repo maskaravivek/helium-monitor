@@ -1,25 +1,48 @@
+<!DOCTYPE html>
 <html>
 
-<body>
-    <div id='configs-div'>
-        <h1>Configure</h1>
-        <div>
-            <span>Enter Hotspot ID: </span><br /><br />
-            <input type="text" id="hotspot_id" name="hotspot_id">
-            <button id='save_btn' type="save" value="save">Save</button>
-        </div>
-    </div>
-    <div id='earnings-div'>
-        <h1>Earnings</h1>
-        <a href='#' id='edit_configs'>Edit configs</a> <br /><br />
-        <div>
-            <span>Last 1 hour: </span><span id='latest-window'></span><span> HNT</span><br /><br />
-            <span>Last 24 hours: </span><span id='last-day-window'></span><span> HNT</span><br /><br />
-            <span>Last 30 days: </span><span id='summary-window'></span> <span> HNT</span><br /><br />
-        </div>
-    </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
 
+<body>
+    <section class="section">
+        <div class="container">
+            <div id='configs-div'>
+                <span class="title">
+                    Configure
+                </span>
+                <div>
+                    <span>Enter Hotspot ID: </span><br /><br />
+                    <input class="input is-primary" type="text" id="hotspot_id" name="hotspot_id">
+                    <button class="button is-primary mt-3" id='save_btn' type="save" value="save">Save</button>
+                </div>
+            </div>
+            <div id='earnings-div'>
+                <span class="title">
+                    Earnings
+                </span>
+                <span class='ml-6'>
+                    <button id='refresh_btn' class="button">
+                        <img height="24" width="24" src="assets/refresh.png">
+                    </button>
+                    <button class="button" id='edit_configs'>
+                        <img height="24" width="24" src="assets/settings.png">
+                    </button>
+                </span>
+                <div class='subtitle is-4 mt-6'>
+                    <span>Last 1 hour: </span><span id='latest-window'></span><span> HNT</span><br /><br />
+                    <span>Last 24 hours: </span><span id='last-day-window'></span><span> HNT</span><br /><br />
+                    <span>Last 30 days: </span><span id='summary-window'></span> <span> HNT</span><br /><br />
+                </div>
+            </div>
+        </div>
+    </section>
     <script src="scripts/index.js"></script>
 </body>
+
 
 </html>
