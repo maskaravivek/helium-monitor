@@ -1,8 +1,10 @@
 const { menubar } = require('menubar');
+const path = require('path');
+
 
 const mb = menubar({
   showDockIcon: false,
-  icon: 'assets/icon.png',
+  icon: path.join(__dirname, 'assets', 'icon.png'),
   browserWindow: {
     width: 440,
     height: 340
@@ -12,6 +14,7 @@ const mb = menubar({
 
 mb.on('ready', () => {
   console.log('app is ready');
+  // mb.tray.setTitle('woo!')
   // your app code here
 });
 
