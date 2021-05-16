@@ -86,6 +86,12 @@ function displayEarnings(hotspot_name) {
             const last_7_days = is_emrit ? (data['7_days_window'] * EMRIT_RATIO) : data['7_days_window'];
             const last_30_days = is_emrit ? (data['summary_window'] * EMRIT_RATIO) : data['summary_window'];
 
+            if (data['device_details']['status'] === "offline") {
+                document.getElementById('status_icon').src = 'assets/offline.png'
+            } else {
+                document.getElementById('status_icon').src = 'assets/online.png'
+            }
+
             if (last_1_hour > 0) {
                 document.getElementById('last-1-hour-hnt').style.display = 'block'
                 document.getElementById('last-1-hour-hnt').innerHTML = `+ ${last_1_hour.toFixed(2)} HNT`
