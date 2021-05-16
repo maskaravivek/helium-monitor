@@ -10,3 +10,7 @@ Tools for monitoring your helium hotspot miner.
 ## Menu bar app
 
 Cross platform app for monitoring your helium device. Works with macOS, Windows and Ubuntu. 
+
+### Screenshot
+
+![Mac Screenshot](screenshots/mac.png)
