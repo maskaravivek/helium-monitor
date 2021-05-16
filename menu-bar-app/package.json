@@ -4,6 +4,7 @@
   "description": "",
   "homepage": "https://github.com/maskaravivek/helium-monitor",
   "main": "myApp.js",
+  "repository": "https://github.com/maskaravivek/helium-monitor",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "install-app-deps",
@@ -42,7 +43,7 @@
       "icon": "build/icon.ico"
     }
   },
-  "author": "Vivek Maskara",
+  "author": "vivek maskara, <maskaravivek@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "menubar": "^9.0.4",
