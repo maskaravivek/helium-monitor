@@ -1,7 +1,7 @@
 {
   "name": "helium-monitor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Helium hotspot monitor",
   "homepage": "https://github.com/maskaravivek/helium-monitor",
   "main": "myApp.js",
   "repository": "https://github.com/maskaravivek/helium-monitor",
