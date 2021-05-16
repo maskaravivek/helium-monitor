@@ -27,6 +27,12 @@ Until then, depending on your preferences, you might have to manually click on *
 
 ![Mac Screenshot](screenshots/mac.png)
 
+
+## Support me
+
+If you found this tool useful and want to support me, you can buy me a coffee. :)
+
+[<img src="menu-bar-app/assets/bmc-yellow.png" alt="drawing" width="160"/>](https://www.buymeacoffee.com/maskara)
 ## Disclaimer
 
 The app doesn't collect any data whatsoever. In future, I am planning to add Google analytics for page views but no other information will ever be collected. Moreover, all the code including backend APIs and frontend application is open source. 
