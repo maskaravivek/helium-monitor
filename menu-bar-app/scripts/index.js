@@ -14,10 +14,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         displayConfigs();
     });
 
-    document.getElementById('coffee_btn').addEventListener("click", function () {
-        require("shell").openExternal("http://www.google.com")
-    });
-
     document.getElementById('refresh_btn').addEventListener("click", function () {
         displayHotspotEarnings();
     });
@@ -94,7 +90,7 @@ function displayEarnings(hotspot_name) {
 
             if (last_1_hour > 0) {
                 document.getElementById('last-1-hour-hnt').style.display = 'block'
-                document.getElementById('last-1-hour-hnt').innerHTML = `+ ${last_1_hour.toFixed(2)} HNT`
+                document.getElementById('last-1-hour-hnt').innerHTML = `+ ${parseFloat(last_1_hour).toFixed(2)} HNT`
             } else {
                 document.getElementById('last-1-hour-hnt').style.display = 'none'
             }
