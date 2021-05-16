@@ -60,7 +60,14 @@ def earnings_summary(hotspot_id, duration_in_days=30):
     return last_day, last_7_days, total
 
 
-def get_hotspot_earnings(hotspot_id, latest_earnings_duration_in_hours=1, summary_duration_in_days=30):
+def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summary_duration_in_days=30):
+    hotspot_details = get_hotspot_details(hotspot_name)
+
+    if 'error' in hotspot_details:
+        return {"error": "Couldn't find a matching device"}
+
+    hotspot_id = hotspot_details['address']
+
     last_window_earnings = latest_earnings(
         hotspot_id, duration_in_hours=latest_earnings_duration_in_hours)
     last_day_earnings, last_7_days_earnings, summary_earnings = earnings_summary(
@@ -73,8 +80,29 @@ def get_hotspot_earnings(hotspot_id, latest_earnings_duration_in_hours=1, summar
         "last_day": "%.2f" % last_day_earnings,
         "summary_window": "%.2f" % summary_earnings,
         "7_days_window": "%.2f" % last_7_days_earnings,
-        'price': price
+        'price': price,
+        'device_details': hotspot_details
     }
+
+def get_hotspot_details(hotspot_name):
+    api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
+
+    api_url = api_url.format(hotspot_name=hotspot_name)
+
+    r = requests.get(api_url)
+
+    resp_data = r.json()['data']
+
+    for item in resp_data:
+        if item['name'] == hotspot_name:
+            return {
+                'status': item['status']['online'],
+                'address': item['address'],
+                'city': item['geocode']['short_city'],
+                'state': item['geocode']['short_state']
+            }
+    
+    return {"error": "Couldn't find a matching device"}
 
 
 def get_price():
@@ -83,8 +111,8 @@ def get_price():
     return r.json()['helium']['usd']
 
 
-def send_earning_update_to_telegram(hotspot_id, token, chat_id):
-    earnings = get_hotspot_earnings(hotspot_id)
+def send_earning_update_to_telegram(hotspot_name, token, chat_id):
+    earnings = get_hotspot_earnings(hotspot_name)
 
     if float(earnings["latest_window"]) > 0:
         message = "You earned {latest_window} HNT in last 1 hour. \n\n Summary: \n Last 24 hours: {last_day} HNT \n Last 7 days: {last_7_day} HNT \n Last 30 days: {summary_window} HNT".format(

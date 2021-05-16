@@ -12,18 +12,26 @@ summary_api = Blueprint('summary', __name__)
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['GET'])
 @docache(minutes=5)
 def get_earnings_api():
-    hotspot_id = request.args.get('hotspot_id')
-    response = helium_service.get_hotspot_earnings(hotspot_id)
+    hotspot_name = request.args.get('hotspot_name')
+    response = helium_service.get_hotspot_earnings(hotspot_name)
+
+    return response
+
+@summary_api.route(COMMON_PREFIX + "/device", methods=['GET'])
+@docache(minutes=5)
+def get_device_details():
+    hotspot_name = request.args.get('hotspot_name')
+    response = helium_service.get_hotspot_details(hotspot_name)
 
     return response
 
 @summary_api.route(COMMON_PREFIX + "/earnings-bot", methods=['GET'])
 @docache(minutes=5)
 def earnings_bot_api():
-    hotspot_id = request.args.get('hotspot_id')
+    hotspot_name = request.args.get('hotspot_name')
     token = request.args.get('token')
     chat_id = request.args.get('chat_id')
     bot_type = request.args.get('bot_type')
-    response = helium_service.send_earning_update_to_telegram(hotspot_id, token, chat_id)
+    response = helium_service.send_earning_update_to_telegram(hotspot_name, token, chat_id)
 
     return response
