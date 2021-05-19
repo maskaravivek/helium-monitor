@@ -17,6 +17,15 @@ def get_earnings_api():
 
     return response
 
+@summary_api.route(COMMON_PREFIX + "/earnings", methods=['POST'])
+@docache(minutes=5)
+def get_multi_device_earnings_api():
+    data = request.json
+    hotspots = data['hotspots']
+    response = helium_service.get_multi_hotspot_earnings(hotspots)
+
+    return response
+
 @summary_api.route(COMMON_PREFIX + "/device", methods=['GET'])
 @docache(minutes=5)
 def get_device_details():

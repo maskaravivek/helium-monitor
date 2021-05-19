@@ -84,6 +84,10 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
         'device_details': hotspot_details
     }
 
+def get_multi_hotspot_earnings(hotspots):
+    return [get_hotspot_earnings(hotspot) for hotspot in hotspots]
+
+
 def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
 
