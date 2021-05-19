@@ -76,16 +76,45 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
     price = get_price()
 
     return {
-        "latest_window": "%.2f" % last_window_earnings,
-        "last_day": "%.2f" % last_day_earnings,
-        "summary_window": "%.2f" % summary_earnings,
-        "7_days_window": "%.2f" % last_7_days_earnings,
+        "latest_window": last_window_earnings,
+        "last_day": last_day_earnings,
+        "summary_window": summary_earnings,
+        "7_days_window": last_7_days_earnings,
         'price': price,
         'device_details': hotspot_details
     }
 
 def get_multi_hotspot_earnings(hotspots):
-    return [get_hotspot_earnings(hotspot) for hotspot in hotspots]
+    device_wise_earnings = [get_hotspot_earnings(hotspot) for hotspot in hotspots]
+
+    total_latest_window_earnings = 0.0
+    total_last_day_earnings = 0.0
+    total_summary_earnings = 0.0
+    total_7_days_window_earnings = 0.0
+    price = 0.0
+    device_status = []
+
+    for device in device_wise_earnings:
+        total_latest_window_earnings += device['latest_window']
+        total_last_day_earnings += device['last_day']
+        total_summary_earnings += device['summary_window']
+        total_7_days_window_earnings += device['7_days_window']
+        price = device['price']
+        device_status.append(device['device_details']['status'])
+
+    overall_status = "offline" if "offline" in device_status else "online" 
+
+    return {
+        "cumulative": {
+            "latest_window": "%.2f" % total_latest_window_earnings,
+            "last_day": "%.2f" % total_last_day_earnings,
+            "summary_window": "%.2f" % total_summary_earnings,
+            "7_days_window": "%.2f" % total_7_days_window_earnings,
+            'price': price,
+            'device_details': overall_status
+        },
+        "devices": device_wise_earnings
+    }
 
 
 def get_hotspot_details(hotspot_name):
