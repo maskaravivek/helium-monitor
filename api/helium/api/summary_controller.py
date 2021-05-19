@@ -10,7 +10,7 @@ from flask import request
 summary_api = Blueprint('summary', __name__)
 
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['GET'])
-@docache(minutes=5)
+@docache(minutes=1)
 def get_earnings_api():
     hotspot_name = request.args.get('hotspot_name')
     response = helium_service.get_hotspot_earnings(hotspot_name)
@@ -18,7 +18,7 @@ def get_earnings_api():
     return response
 
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['POST'])
-@docache(minutes=5)
+@docache(minutes=1)
 def get_multi_device_earnings_api():
     data = request.json
     hotspots = data['hotspots']
@@ -27,7 +27,7 @@ def get_multi_device_earnings_api():
     return response
 
 @summary_api.route(COMMON_PREFIX + "/device", methods=['GET'])
-@docache(minutes=5)
+@docache(minutes=1)
 def get_device_details():
     hotspot_name = request.args.get('hotspot_name')
     response = helium_service.get_hotspot_details(hotspot_name)
@@ -35,7 +35,7 @@ def get_device_details():
     return response
 
 @summary_api.route(COMMON_PREFIX + "/earnings-bot", methods=['GET'])
-@docache(minutes=5)
+@docache(minutes=1)
 def earnings_bot_api():
     hotspot_name = request.args.get('hotspot_name')
     token = request.args.get('token')
