@@ -1,6 +1,13 @@
 const { menubar } = require('menubar');
 const path = require('path');
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, ipcMain } = require('electron')
+
+const { app, autoUpdater } = require('electron')
+
+const server = "https://hazel-ten-rho.vercel.app"
+const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+
+autoUpdater.setFeedURL(feed)
 
 const mb = menubar({
   showDockIcon: false,

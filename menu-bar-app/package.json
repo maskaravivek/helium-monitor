@@ -46,7 +46,8 @@
   "license": "ISC",
   "dependencies": {
     "menubar": "^9.0.4",
-    "universal-analytics": "^0.4.23"
+    "universal-analytics": "^0.4.23",
+    "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "electron": "^12.0.7",
