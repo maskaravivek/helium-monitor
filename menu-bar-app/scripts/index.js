@@ -10,7 +10,7 @@ function showEarningsOrConfigs() {
     if (hasSavedHotspots()) {
         displayHotspotEarnings();
     } else {
-        showConfigsDiv();
+        displayConfigs();
     }
 }
 
@@ -18,8 +18,14 @@ function attachEventHandlers() {
     document.getElementById('save_btn').addEventListener("click", function () {
         let hotspot_name_input_val = document.getElementById('hotspot_name').value;
         let is_emrit = document.getElementById("is_emrit").checked;
-        addOrEditConfig(hotspot_name_input_val, is_emrit);
-        displayHotspotEarnings();
+        if (hotspot_name_input_val !== "" && hotspot_name_input_val !== null && hotspot_name_input_val !== undefined) {
+            addOrEditConfig(hotspot_name_input_val, is_emrit);
+        }
+        displayConfigs();
+    });
+
+    document.getElementById('add_btn').addEventListener("click", function () {
+        showAddHotspotDiv();
     });
 
     document.getElementById('edit_configs').addEventListener("click", function () {
@@ -29,6 +35,11 @@ function attachEventHandlers() {
     document.getElementById('refresh_btn').addEventListener("click", function () {
         displayHotspotEarnings();
     });
+}
+
+function showAddHotspotDiv() {
+    document.getElementById('add_new_hotspot_div').style.display = 'block';
+    document.getElementById('hotspot_list').style.display = 'none';
 }
 
 function hasSavedHotspots() {
@@ -44,14 +55,25 @@ function hasSavedHotspots() {
 }
 
 function addOrEditConfig(hotspot_name, is_emrit) {
-    let hotspots = localStorage.getItem("hotspots")
+    fetch(`https://helium-monitor.herokuapp.com/api/v1/device?hotspot_name=${hotspot_name}`)
+        .then(response => response.json())
+        .then(data => {
+            if("error" in data) {
+                console.log("error occurred", data)
+                return
+            }
+            let hotspots = localStorage.getItem("hotspots")
 
-    if (hotspots !== null && hotspots !== undefined) {
-        hotspots = JSON.parse(hotspots)
-    }
+            if (hotspots !== null && hotspots !== undefined) {
+                hotspots = JSON.parse(hotspots)
+            }
 
-    hotspots[hotspot_name] = is_emrit;
-    localStorage.setItem("hotspots", JSON.stringify(hotspots))
+            hotspots[hotspot_name] = is_emrit;
+            localStorage.setItem("hotspots", JSON.stringify(hotspots))
+        })
+        .catch(err => {
+            console.log(err)
+        });
 }
 
 function migrateOldData() {
@@ -76,6 +98,14 @@ window.addEventListener('focus', (event) => {
 
 function displayConfigs() {
     showConfigsDiv();
+    let hotspots = localStorage.getItem("hotspots")
+
+    if (hotspots == null || hotspots == undefined) {
+        return
+    }
+
+    hotspots = JSON.parse(hotspots)
+    showhotspots(Object.keys(hotspots))
 }
 
 function showLoadingIndicator(isVisible) {
@@ -101,11 +131,25 @@ function displayHotspotEarnings() {
 function showConfigsDiv() {
     document.getElementById('configs-div').style.display = "block";
     document.getElementById('earnings-div').style.display = "none";
+    document.getElementById('add_new_hotspot_div').style.display = 'none';
 }
 
 function showEarningsDiv() {
     document.getElementById('configs-div').style.display = "none";
     document.getElementById('earnings-div').style.display = "block";
+    document.getElementById('add_new_hotspot_div').style.display = 'none';
+}
+
+function showhotspots(hotspots) {
+    let hotspot_div = document.getElementById('hotspot_ul')
+    let hotspot_elements = []
+
+    for (var idx = 0; idx < hotspots.length; idx++) {
+        hotspot_elements.push(`<div class='list-item'><li>${hotspots[idx]}<button class='delete'></button></li></div>`)
+    }
+
+    let hotspots_html = hotspot_elements.join('')
+    hotspot_div.innerHTML = hotspots_html
 }
 
 function fetchAndDisplayEarnings() {

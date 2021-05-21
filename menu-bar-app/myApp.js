@@ -2,30 +2,30 @@ const { menubar } = require('menubar');
 const path = require('path');
 const { app, ipcMain, autoUpdater } = require('electron')
 
-const UPDATE_CHECK_INTERVAL = 10 * 60 * 1000
+// const UPDATE_CHECK_INTERVAL = 10 * 60 * 1000
 
-const server = "https://hazel-ten-rho.vercel.app"
-const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+// const server = "https://hazel-ten-rho.vercel.app"
+// const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
-autoUpdater.setFeedURL(feed)
+// autoUpdater.setFeedURL(feed)
 
-setInterval(() => {
-  autoUpdater.checkForUpdates()
-}, UPDATE_CHECK_INTERVAL)
+// setInterval(() => {
+//   autoUpdater.checkForUpdates()
+// }, UPDATE_CHECK_INTERVAL)
 
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart', 'Later'],
-    title: 'Application Update',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-  }
+// autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+//   const dialogOpts = {
+//     type: 'info',
+//     buttons: ['Restart', 'Later'],
+//     title: 'Application Update',
+//     message: process.platform === 'win32' ? releaseNotes : releaseName,
+//     detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+//   }
 
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
-})
+//   dialog.showMessageBox(dialogOpts).then((returnValue) => {
+//     if (returnValue.response === 0) autoUpdater.quitAndInstall()
+//   })
+// })
 
 const mb = menubar({
   showDockIcon: false,
@@ -47,7 +47,7 @@ mb.on('ready', () => {
 });
 
 mb.on('after-create-window', () => {
-  //  mb.window.openDevTools()
+   mb.window.openDevTools()
 })
 
 ipcMain.on('bmc-event', (event, arg) => {
