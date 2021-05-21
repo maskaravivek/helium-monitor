@@ -1,13 +1,25 @@
 const EMRIT_RATIO = 0.2
 
 window.addEventListener('DOMContentLoaded', (event) => {
+    migrateOldData()
+    attachEventHandlers();
+    showEarningsOrConfigs();
+});
+
+function showEarningsOrConfigs() {
+    if (hasSavedHotspots()) {
+        displayHotspotEarnings();
+    } else {
+        showConfigsDiv();
+    }
+}
+
+function attachEventHandlers() {
     document.getElementById('save_btn').addEventListener("click", function () {
-        let hotspot_name_input_val = document.getElementById('hotspot_name').value
-        let is_emrit = document.getElementById("is_emrit").checked
-        localStorage.setItem('hotspot_name', hotspot_name_input_val)
-        localStorage.setItem('is_emrit', is_emrit)
-        showEarningsDiv()
-        displayEarnings(hotspot_name_input_val)
+        let hotspot_name_input_val = document.getElementById('hotspot_name').value;
+        let is_emrit = document.getElementById("is_emrit").checked;
+        addOrEditConfig(hotspot_name_input_val, is_emrit);
+        displayHotspotEarnings();
     });
 
     document.getElementById('edit_configs').addEventListener("click", function () {
@@ -17,27 +29,53 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('refresh_btn').addEventListener("click", function () {
         displayHotspotEarnings();
     });
+}
 
-    let hotspot_name = localStorage.getItem('hotspot_name')
-    if (hotspot_name === null || hotspot_name === undefined) {
-        showConfigsDiv();
-    } else {
-        displayHotspotEarnings()
+function hasSavedHotspots() {
+    let hotspots = localStorage.getItem("hotspots")
+
+    if (hotspots == null || hotspots == undefined) {
+        return false;
     }
-});
+
+    hotspots = JSON.parse(hotspots)
+
+    return Object.keys(hotspots).length > 0;
+}
+
+function addOrEditConfig(hotspot_name, is_emrit) {
+    let hotspots = localStorage.getItem("hotspots")
+
+    if (hotspots !== null && hotspots !== undefined) {
+        hotspots = JSON.parse(hotspots)
+    }
+
+    hotspots[hotspot_name] = is_emrit;
+    localStorage.setItem("hotspots", JSON.stringify(hotspots))
+}
+
+function migrateOldData() {
+    let is_migrated = localStorage.getItem('is_migrated') === "true" || false;
+    if (!is_migrated) {
+        let hotspot = localStorage.getItem('hotspot_name')
+        let is_emrit = localStorage.getItem('is_emrit')
+
+        if (hotspot !== null && hotspot !== undefined) {
+            let hotspot_dict = {}
+            hotspot_dict[hotspot] = is_emrit
+
+            localStorage.setItem("hotspots", JSON.stringify(hotspot_dict))
+        }
+        localStorage.setItem("is_migrated", true)
+    }
+}
 
 window.addEventListener('focus', (event) => {
-    console.log('focus')
     displayHotspotEarnings();
 });
 
 function displayConfigs() {
     showConfigsDiv();
-    let hotspot_name = localStorage.getItem('hotspot_name');
-    if (hotspot_name !== undefined && hotspot_name !== null) {
-        document.getElementById('hotspot_name').value = localStorage.getItem('hotspot_name');
-        document.getElementById('is_emrit').checked = localStorage.getItem('is_emrit') === "true";
-    }
 }
 
 function showLoadingIndicator(isVisible) {
@@ -54,10 +92,9 @@ function showLoadingIndicator(isVisible) {
 }
 
 function displayHotspotEarnings() {
-    let hotspot_name = localStorage.getItem('hotspot_name');
     showEarningsDiv();
     showLoadingIndicator(true)
-    displayEarnings(hotspot_name);
+    fetchAndDisplayEarnings();
     setTimeout(function () { showLoadingIndicator(false); }, 300)
 }
 
@@ -71,37 +108,68 @@ function showEarningsDiv() {
     document.getElementById('earnings-div').style.display = "block";
 }
 
-function displayEarnings(hotspot_name) {
-    fetch(`https://helium-monitor.herokuapp.com/api/v1/earnings?hotspot_name=${hotspot_name}`)
+function fetchAndDisplayEarnings() {
+    let hotspots = localStorage.getItem("hotspots")
+
+    if (hotspots == null || hotspots == undefined) {
+        return
+    }
+
+    hotspots = JSON.parse(hotspots)
+    let request = {
+        "hotspots": hotspots
+    }
+
+    fetch('https://helium-monitor.herokuapp.com/api/v1/earnings', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(request)
+    })
         .then(response => response.json())
         .then(data => {
-            let is_emrit = localStorage.getItem('is_emrit') == "true"
+            displayEarnings(data["cumulative"], true);
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 
-            const last_1_hour = is_emrit ? (data['latest_window'] * EMRIT_RATIO) : data['latest_window'];
-            const last_24_hours = is_emrit ? (data['last_day'] * EMRIT_RATIO) : data['last_day'];
-            const last_7_days = is_emrit ? (data['7_days_window'] * EMRIT_RATIO) : data['7_days_window'];
-            const last_30_days = is_emrit ? (data['summary_window'] * EMRIT_RATIO) : data['summary_window'];
+function displayEarnings(data, is_cumulative) {
+    const last_1_hour = parseFloat(data['latest_window']);
+    const last_24_hours = parseFloat(data['last_day']);
+    const last_7_days = parseFloat(data['7_days_window']);
+    const last_30_days = parseFloat(data['summary_window']);
+    const price = parseFloat(data['price'])
 
-            if (data['device_details']['status'] === "offline") {
-                document.getElementById('status_icon').src = 'assets/offline.png'
-            } else {
-                document.getElementById('status_icon').src = 'assets/online.png'
-            }
+    if (getStatus(data, is_cumulative) === "offline") {
+        document.getElementById('status_icon').src = 'assets/offline.png';
+    } else {
+        document.getElementById('status_icon').src = 'assets/online.png';
+    }
 
-            if (last_1_hour > 0) {
-                document.getElementById('last-1-hour-hnt').style.display = 'block'
-                document.getElementById('last-1-hour-hnt').innerHTML = `+ ${parseFloat(last_1_hour).toFixed(2)} HNT`
-            } else {
-                document.getElementById('last-1-hour-hnt').style.display = 'none'
-            }
+    if (last_1_hour > 0) {
+        document.getElementById('last-1-hour-hnt').style.display = 'block';
+        document.getElementById('last-1-hour-hnt').innerHTML = `+ ${last_1_hour.toFixed(2)} HNT`;
+    } else {
+        document.getElementById('last-1-hour-hnt').style.display = 'none';
+    }
 
-            document.getElementById('last-day-window-hnt').innerHTML = `${parseFloat(last_24_hours).toFixed(2)} HNT`
-            document.getElementById('last-day-window-usd').innerHTML = `$ ${(last_24_hours * data['price']).toFixed(2)}`
+    document.getElementById('last-day-window-hnt').innerHTML = `${last_24_hours.toFixed(2)} HNT`;
+    document.getElementById('last-day-window-usd').innerHTML = `$ ${(last_24_hours * price).toFixed(2)}`;
 
-            document.getElementById('last-7-day-window-hnt').innerHTML = `${parseFloat(last_7_days).toFixed(2)} HNT`
-            document.getElementById('last-7-day-window-usd').innerHTML = `$ ${(last_7_days * data['price']).toFixed(2)}`
+    document.getElementById('last-7-day-window-hnt').innerHTML = `${last_7_days.toFixed(2)} HNT`;
+    document.getElementById('last-7-day-window-usd').innerHTML = `$ ${(last_7_days * price).toFixed(2)}`;
 
-            document.getElementById('summary-window-hnt').innerHTML = `${parseFloat(last_30_days).toFixed(2)} HNT`
-            document.getElementById('summary-window-usd').innerHTML = `$ ${(last_30_days * data['price']).toFixed(2)}`
-        });
+    document.getElementById('summary-window-hnt').innerHTML = `${last_30_days.toFixed(2)} HNT`;
+    document.getElementById('summary-window-usd').innerHTML = `$ ${(last_30_days * price).toFixed(2)}`;
+}
+
+function getStatus(data, is_cumulative) {
+    if (is_cumulative) {
+        return data['status']
+    } else {
+        return data['device_details']['status']
+    }
 }

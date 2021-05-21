@@ -3,6 +3,8 @@ from datetime import datetime
 import urllib
 from .bots.telegram import telegram_bot_sendtext
 
+EMRIT_RATIO = 0.2
+
 
 def latest_earnings(hotspot_id, duration_in_hours=1):
     from_time = "-{hours}%20hour".format(hours=duration_in_hours)
@@ -84,8 +86,21 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
         'device_details': hotspot_details
     }
 
+
+def get_hotspot_earnings_with_emrit_factor(hotspot_name, is_emrit):
+    earnings = get_hotspot_earnings(hotspot_name)
+    if is_emrit:
+        earnings["latest_window"] = earnings["latest_window"] * EMRIT_RATIO
+        earnings["last_day"] = earnings["last_day"] * EMRIT_RATIO
+        earnings["summary_window"] = earnings["summary_window"] * EMRIT_RATIO
+        earnings["7_days_window"] = earnings["7_days_window"] * EMRIT_RATIO
+
+    return earnings
+
+
 def get_multi_hotspot_earnings(hotspots):
-    device_wise_earnings = [get_hotspot_earnings(hotspot) for hotspot in hotspots]
+    device_wise_earnings = [get_hotspot_earnings_with_emrit_factor(
+        hotspot_name, is_emrit) for (hotspot_name, is_emrit) in hotspots.items()]
 
     total_latest_window_earnings = 0.0
     total_last_day_earnings = 0.0
@@ -102,7 +117,7 @@ def get_multi_hotspot_earnings(hotspots):
         price = device['price']
         device_status.append(device['device_details']['status'])
 
-    overall_status = "offline" if "offline" in device_status else "online" 
+    overall_status = "offline" if "offline" in device_status else "online"
 
     return {
         "cumulative": {
@@ -111,7 +126,7 @@ def get_multi_hotspot_earnings(hotspots):
             "summary_window": "%.2f" % total_summary_earnings,
             "7_days_window": "%.2f" % total_7_days_window_earnings,
             'price': price,
-            'device_details': overall_status
+            'status': overall_status
         },
         "devices": device_wise_earnings
     }
@@ -134,7 +149,7 @@ def get_hotspot_details(hotspot_name):
                 'city': item['geocode']['short_city'],
                 'state': item['geocode']['short_state']
             }
-    
+
     return {"error": "Couldn't find a matching device"}
 
 

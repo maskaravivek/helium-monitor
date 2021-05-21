@@ -1,8 +1,6 @@
 const { menubar } = require('menubar');
 const path = require('path');
-const { app, ipcMain } = require('electron')
-
-const { app, autoUpdater } = require('electron')
+const { app, ipcMain, autoUpdater } = require('electron')
 
 const UPDATE_CHECK_INTERVAL = 10 * 60 * 1000
 
@@ -10,8 +8,6 @@ const server = "https://hazel-ten-rho.vercel.app"
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
-
-const UPDATE_CHECK_INTERVAL = 10 * 60 * 1000
 
 setInterval(() => {
   autoUpdater.checkForUpdates()
@@ -51,7 +47,7 @@ mb.on('ready', () => {
 });
 
 mb.on('after-create-window', () => {
-  // mb.window.openDevTools()
+  //  mb.window.openDevTools()
 })
 
 ipcMain.on('bmc-event', (event, arg) => {
