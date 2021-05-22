@@ -90,6 +90,7 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
 def get_hotspot_earnings_with_emrit_factor(hotspot_name, is_emrit):
     earnings = get_hotspot_earnings(hotspot_name)
     if is_emrit:
+        print('inside is emrit', hotspot_name)
         earnings["latest_window"] = earnings["latest_window"] * EMRIT_RATIO
         earnings["last_day"] = earnings["last_day"] * EMRIT_RATIO
         earnings["summary_window"] = earnings["summary_window"] * EMRIT_RATIO

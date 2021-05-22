@@ -1,5 +1,12 @@
 const EMRIT_RATIO = 0.2
 
+const USE_PROD_ENDPOINT = false
+const PROD_API_ENDPOINT = "https://helium-monitor.herokuapp.com"
+const LOCAL_API_ENDPOINT = "http://127.0.0.1:5000"
+
+let API_ENDPOINT = USE_PROD_ENDPOINT ? PROD_API_ENDPOINT : LOCAL_API_ENDPOINT
+
+
 window.addEventListener('DOMContentLoaded', (event) => {
     migrateOldData()
     attachEventHandlers();
@@ -18,10 +25,33 @@ function attachEventHandlers() {
     document.getElementById('save_btn').addEventListener("click", function () {
         let hotspot_name_input_val = document.getElementById('hotspot_name').value;
         let is_emrit = document.getElementById("is_emrit").checked;
+
+        hotspot_name_input_val = hotspot_name_input_val.toLowerCase().trim().replaceAll(' ', '-')
         if (hotspot_name_input_val !== "" && hotspot_name_input_val !== null && hotspot_name_input_val !== undefined) {
             addOrEditConfig(hotspot_name_input_val, is_emrit);
         }
+    });
+
+    document.getElementById('hotspot_name').addEventListener('input', (event) => {
+        document.getElementById('add_hotspot_error').innerHTML = ""
+    });
+
+
+    document.getElementById('hotspot_list').addEventListener('click', (event) => {
+        const isButton = event.target.nodeName === 'BUTTON';
+        if (!isButton) {
+            return;
+        }
+
+        removeHotspot(event.target.value);
+    })
+
+    document.getElementById('cancel_btn').addEventListener("click", function () {
         displayConfigs();
+    });
+
+    document.getElementById('home_btn').addEventListener("click", function () {
+        displayHotspotEarnings();
     });
 
     document.getElementById('add_btn').addEventListener("click", function () {
@@ -35,6 +65,22 @@ function attachEventHandlers() {
     document.getElementById('refresh_btn').addEventListener("click", function () {
         displayHotspotEarnings();
     });
+}
+
+function removeHotspot(hotspot_name) {
+    let hotspots = localStorage.getItem("hotspots")
+
+    if (hotspots == null || hotspots == undefined) {
+        return false;
+    }
+
+    hotspots = JSON.parse(hotspots)
+
+    hotspots.hasOwnProperty(hotspot_name)
+    delete hotspots[hotspot_name]
+    localStorage.setItem("hotspots", JSON.stringify(hotspots))
+
+    displayConfigs()
 }
 
 function showAddHotspotDiv() {
@@ -55,11 +101,11 @@ function hasSavedHotspots() {
 }
 
 function addOrEditConfig(hotspot_name, is_emrit) {
-    fetch(`https://helium-monitor.herokuapp.com/api/v1/device?hotspot_name=${hotspot_name}`)
+    fetch(`${API_ENDPOINT}/api/v1/device?hotspot_name=${hotspot_name}`)
         .then(response => response.json())
         .then(data => {
-            if("error" in data) {
-                console.log("error occurred", data)
+            if ("error" in data) {
+                document.getElementById('add_hotspot_error').innerHTML = data['error']
                 return
             }
             let hotspots = localStorage.getItem("hotspots")
@@ -70,9 +116,10 @@ function addOrEditConfig(hotspot_name, is_emrit) {
 
             hotspots[hotspot_name] = is_emrit;
             localStorage.setItem("hotspots", JSON.stringify(hotspots))
+            setTimeout(displayConfigs(), 500)
         })
         .catch(err => {
-            console.log(err)
+            document.getElementById('add_hotspot_error').innerHTML = "Couldn't add hotspot. Please try again."
         });
 }
 
@@ -131,21 +178,23 @@ function displayHotspotEarnings() {
 function showConfigsDiv() {
     document.getElementById('configs-div').style.display = "block";
     document.getElementById('earnings-div').style.display = "none";
+    document.getElementById('hotspot_list').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
 }
 
 function showEarningsDiv() {
     document.getElementById('configs-div').style.display = "none";
     document.getElementById('earnings-div').style.display = "block";
+    document.getElementById('hotspot_list').style.display = 'none';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
 }
 
 function showhotspots(hotspots) {
-    let hotspot_div = document.getElementById('hotspot_ul')
+    let hotspot_div = document.getElementById('hotspot_list')
     let hotspot_elements = []
 
     for (var idx = 0; idx < hotspots.length; idx++) {
-        hotspot_elements.push(`<div class='list-item'><li>${hotspots[idx]}<button class='delete'></button></li></div>`)
+        hotspot_elements.push(`<span class='tag is-success'>${hotspots[idx]}<button value="${hotspots[idx]}" class='delete is-small'></button></span>`)
     }
 
     let hotspots_html = hotspot_elements.join('')
@@ -164,7 +213,7 @@ function fetchAndDisplayEarnings() {
         "hotspots": hotspots
     }
 
-    fetch('https://helium-monitor.herokuapp.com/api/v1/earnings', {
+    fetch(`${API_ENDPOINT}/api/v1/earnings`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'

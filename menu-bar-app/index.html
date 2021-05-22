@@ -13,7 +13,10 @@
         <div class="container">
             <div id='configs-div'>
                 <div class='columns is-mobile'>
-                    <div class="column title mr-6">
+                    <div class="title mr-6">
+                        <button style="border: none;" id='home_btn' class="button">
+                            <img style="cursor:pointer;" title="Home" height="24" width="24" src="assets/home.png">
+                        </button>
                         <span>Configure</span>
                     </div>
                     <div style="text-align: right;" class='column ml-1'>
@@ -24,19 +27,19 @@
                     </div>
                 </div>
                 <div>
-                    <div id ='hotspot_list' class='list'>
-                        <ul id='hotspot_ul'>
-                            
-                        </ul>
+                    <div id='hotspot_list' class='tags'>
+                        <span class="tag is-success">Bar<button class="delete is-small"></button></span>
                     </div>
                     <div style="display: none;" id="add_new_hotspot_div">
-                        <input placeholder="Enter Hotspot Name" class="input is-primary mt-3" type="text"
-                            id="hotspot_name" name="hotspot_name">
+                        <input placeholder="Enter Hotspot Name. Eg. spare-fleece-urchin" class="input is-primary mt-3"
+                            type="text" id="hotspot_name" name="hotspot_name"><br />
+                        <span style="font-size: 10px; color: red;" id="add_hotspot_error"></span><br />
                         <label class="checkbox mt-3">
                             <input id="is_emrit" type="checkbox">
                             Its an Emrit device.
                         </label> <br />
                         <button class="button is-primary mt-3" id='save_btn' type="save" value="save">Save</button>
+                        <button class="button mt-3" id='cancel_btn' type="cancel" value="cancel">Cancel</button>
                     </div>
 
                     <div style="text-align: center">

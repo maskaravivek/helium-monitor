@@ -9,6 +9,7 @@ from flask import request
 
 summary_api = Blueprint('summary', __name__)
 
+
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['GET'])
 @docache(minutes=1)
 def get_earnings_api():
@@ -16,6 +17,7 @@ def get_earnings_api():
     response = helium_service.get_hotspot_earnings(hotspot_name)
 
     return response
+
 
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['POST'])
 @docache(minutes=1)
@@ -26,6 +28,7 @@ def get_multi_device_earnings_api():
 
     return response
 
+
 @summary_api.route(COMMON_PREFIX + "/device", methods=['GET'])
 @docache(minutes=1)
 def get_device_details():
@@ -34,6 +37,7 @@ def get_device_details():
 
     return response
 
+
 @summary_api.route(COMMON_PREFIX + "/earnings-bot", methods=['GET'])
 @docache(minutes=1)
 def earnings_bot_api():
@@ -41,6 +45,7 @@ def earnings_bot_api():
     token = request.args.get('token')
     chat_id = request.args.get('chat_id')
     bot_type = request.args.get('bot_type')
-    response = helium_service.send_earning_update_to_telegram(hotspot_name, token, chat_id)
+    response = helium_service.send_earning_update_to_telegram(
+        hotspot_name, token, chat_id)
 
     return response
