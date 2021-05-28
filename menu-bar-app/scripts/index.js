@@ -65,6 +65,42 @@ function attachEventHandlers() {
     document.getElementById('refresh_btn').addEventListener("click", function () {
         displayHotspotEarnings();
     });
+
+    document.getElementById('device_select').addEventListener("change", (event) => {
+        setActiveSelection(event.target.value)
+        displayEarnings()
+    });
+}
+
+function setActiveSelection(val) {
+    localStorage.setItem("active_selection", val)
+    if (val === 'all-devices') {
+        document.getElementById("web_btn").disabled = true;
+    } else {
+        document.getElementById("web_btn").disabled = false;
+    }
+}
+
+function populateSelectBox() {
+    let hotspots = localStorage.getItem("hotspots")
+
+    if (hotspots == null || hotspots == undefined) {
+        return false;
+    }
+
+    hotspots = JSON.parse(hotspots)
+
+    let hotspot_select = document.getElementById('device_select')
+    let options = []
+    options.push("<option value ='all-devices'>All devices</option>")
+
+    Object.keys(hotspots).forEach((hotspot) => {
+        options.push(`<option value="${hotspot}">${hotspot}</option>`)
+    })
+
+    hotspot_select.innerHTML = options.join('')
+    let last_active_selection = localStorage.getItem("active_selection")
+    hotspot_select.value = last_active_selection
 }
 
 function removeHotspot(hotspot_name) {
@@ -135,6 +171,8 @@ function migrateOldData() {
 
             localStorage.setItem("hotspots", JSON.stringify(hotspot_dict))
         }
+
+        localStorage.setItem("active_selection", "all-devices")
         localStorage.setItem("is_migrated", true)
     }
 }
@@ -172,6 +210,7 @@ function displayHotspotEarnings() {
     showEarningsDiv();
     showLoadingIndicator(true)
     fetchAndDisplayEarnings();
+    populateSelectBox();
     setTimeout(function () { showLoadingIndicator(false); }, 300)
 }
 
@@ -222,14 +261,31 @@ function fetchAndDisplayEarnings() {
     })
         .then(response => response.json())
         .then(data => {
-            displayEarnings(data["cumulative"], true);
+            localStorage.setItem('earnings_resp', JSON.stringify(data))
+            displayEarnings();
         })
         .catch(err => {
             console.log(err)
         })
 }
 
-function displayEarnings(data, is_cumulative) {
+function displayEarnings() {
+    let earnings_resp = JSON.parse(localStorage.getItem('earnings_resp'))
+    let active_selection = localStorage.getItem('active_selection')
+    let is_cumulative = active_selection === 'all-devices'
+    let data = {}
+    if (is_cumulative) {
+        data = earnings_resp['cumulative']
+    } else {
+        let devices_data = earnings_resp['devices']
+
+        devices_data.forEach((device_data) => {
+            if (device_data['device_details']['name'] === active_selection) {
+                localStorage.setItem('active_hotspot_id', device_data['device_details']['address'])
+                data = device_data
+            }
+        })
+    }
     const last_1_hour = parseFloat(data['latest_window']);
     const last_24_hours = parseFloat(data['last_day']);
     const last_7_days = parseFloat(data['7_days_window']);

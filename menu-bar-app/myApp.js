@@ -31,8 +31,8 @@ const mb = menubar({
   showDockIcon: false,
   icon: path.join(__dirname, 'assets', 'icon.png'),
   browserWindow: {
-    width: 440,
-    height: 400,
+    width: 640,
+    height: 420,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js')
@@ -47,10 +47,15 @@ mb.on('ready', () => {
 });
 
 mb.on('after-create-window', () => {
-   mb.window.openDevTools()
+  //  mb.window.openDevTools()
 })
 
 ipcMain.on('bmc-event', (event, arg) => {
   event.returnValue = 'Message received!'
   require('electron').shell.openExternal('https://www.buymeacoffee.com/maskara');
+})
+
+ipcMain.on('hotspot-event', (event, arg) => {
+  event.returnValue = 'Message received!'
+  require('electron').shell.openExternal(`https://explorer.helium.com/hotspots/${arg}`);
 })

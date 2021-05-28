@@ -147,6 +147,7 @@ def get_hotspot_details(hotspot_name):
             return {
                 'status': item['status']['online'],
                 'address': item['address'],
+                'name': item['name'],
                 'city': item['geocode']['short_city'],
                 'state': item['geocode']['short_state']
             }
