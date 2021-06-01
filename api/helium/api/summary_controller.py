@@ -28,6 +28,14 @@ def get_multi_device_earnings_api():
 
     return response
 
+@summary_api.route(COMMON_PREFIX + "/earningsv2", methods=['POST'])
+@docache(minutes=1)
+def get_multi_device_earnings_api_v2():
+    data = request.json
+    hotspots = data['hotspots']
+    response = helium_service.get_multi_hotspot_earnings_v2(hotspots)
+    return response
+
 
 @summary_api.route(COMMON_PREFIX + "/device", methods=['GET'])
 @docache(minutes=1)
