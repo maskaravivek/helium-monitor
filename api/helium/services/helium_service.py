@@ -89,7 +89,7 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
 
 def get_hotspot_earnings_with_emrit_factor(hotspot_name, is_emrit):
     earnings = get_hotspot_earnings(hotspot_name)
-    if is_emrit:
+    if is_emrit < 100:
         print('inside is emrit', hotspot_name)
         earnings["latest_window"] = earnings["latest_window"] * EMRIT_RATIO
         earnings["last_day"] = earnings["last_day"] * EMRIT_RATIO
@@ -101,6 +101,51 @@ def get_hotspot_earnings_with_emrit_factor(hotspot_name, is_emrit):
 
 def get_multi_hotspot_earnings(hotspots):
     device_wise_earnings = [get_hotspot_earnings_with_emrit_factor(
+        hotspot_name, is_emrit) for (hotspot_name, is_emrit) in hotspots.items()]
+
+    total_latest_window_earnings = 0.0
+    total_last_day_earnings = 0.0
+    total_summary_earnings = 0.0
+    total_7_days_window_earnings = 0.0
+    price = 0.0
+    device_status = []
+
+    for device in device_wise_earnings:
+        total_latest_window_earnings += device['latest_window']
+        total_last_day_earnings += device['last_day']
+        total_summary_earnings += device['summary_window']
+        total_7_days_window_earnings += device['7_days_window']
+        price = device['price']
+        device_status.append(device['device_details']['status'])
+
+    overall_status = "offline" if "offline" in device_status else "online"
+
+    return {
+        "cumulative": {
+            "latest_window": "%.2f" % total_latest_window_earnings,
+            "last_day": "%.2f" % total_last_day_earnings,
+            "summary_window": "%.2f" % total_summary_earnings,
+            "7_days_window": "%.2f" % total_7_days_window_earnings,
+            'price': price,
+            'status': overall_status
+        },
+        "devices": device_wise_earnings
+    }
+
+
+def get_hotspot_earnings_with_emrit_factor_v2(hotspot_name, is_emrit):
+    earnings = get_hotspot_earnings(hotspot_name)
+    print('inside is emrit', hotspot_name)
+    earnings["latest_window"] = earnings["latest_window"] * is_emrit / 100
+    earnings["last_day"] = earnings["last_day"] * is_emrit / 100
+    earnings["summary_window"] = earnings["summary_window"] * is_emrit / 100
+    earnings["7_days_window"] = earnings["7_days_window"] * is_emrit / 100
+
+    return earnings
+
+
+def get_multi_hotspot_earnings_v2(hotspots):
+    device_wise_earnings = [get_hotspot_earnings_with_emrit_factor_v2(
         hotspot_name, is_emrit) for (hotspot_name, is_emrit) in hotspots.items()]
 
     total_latest_window_earnings = 0.0
