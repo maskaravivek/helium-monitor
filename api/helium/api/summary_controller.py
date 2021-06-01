@@ -34,7 +34,6 @@ def get_multi_device_earnings_api_v2():
     data = request.json
     hotspots = data['hotspots']
     response = helium_service.get_multi_hotspot_earnings_v2(hotspots)
-    print(response)
     return response
 
 
