@@ -252,7 +252,7 @@ function fetchAndDisplayEarnings() {
         "hotspots": hotspots
     }
 
-    fetch(`${API_ENDPOINT}/api/v1/earnings`, {
+    fetch(`${API_ENDPOINT}/api/v1/earningsv2`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
