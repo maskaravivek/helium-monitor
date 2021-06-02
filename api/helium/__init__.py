@@ -11,13 +11,13 @@ app = Flask(__name__)
 app.config.from_pyfile('flask.cfg')
 
 dsn = os.environ.get('SENTRY_DSN_API')
-# if dsn != None:
-#     sentry_sdk.init(
-#         dsn=dsn,
-#         integrations=[FlaskIntegration()],
-#         environment=os.environ.get('ENVIRONMENT', 'development'),
-#         release=os.environ.get('VERSION')
-#     )
+if dsn != None:
+    sentry_sdk.init(
+        dsn=dsn,
+        integrations=[FlaskIntegration()],
+        environment=os.environ.get('ENVIRONMENT', 'development'),
+        release=os.environ.get('VERSION')
+    )
 
 @app.errorhandler(404)
 def not_found_error(error):

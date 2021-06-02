@@ -6,10 +6,17 @@ from ..utils.api import handle_response
 
 health_check_api = Blueprint('health_check', __name__)
 
+
 @health_check_api.route(COMMON_PREFIX + "/status")
 def check_health():
-    return handle_response({ "status": "healthy" })
+    return handle_response({"status": "healthy"})
+
 
 @health_check_api.route(COMMON_PREFIX + "/env")
 def check_env():
     return handle_response(str(os.environ))
+
+
+@health_check_api.route(COMMON_PREFIX + "/env")
+def sentry_check():
+    division_by_zero = 1 / 0

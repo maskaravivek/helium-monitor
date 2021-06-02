@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 import urllib
 from .bots.telegram import telegram_bot_sendtext
+from helium.cache import cache
 
 EMRIT_RATIO = 0.2
 
@@ -175,7 +176,7 @@ def get_multi_hotspot_earnings_v2(hotspots):
         "devices": device_wise_earnings
     }
 
-
+@cache.memoize(timeout=120, make_name='device_details')
 def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
 
@@ -197,7 +198,7 @@ def get_hotspot_details(hotspot_name):
 
     return {"error": "Couldn't find a matching device"}
 
-
+@cache.cached(timeout=120, key_prefix='helium_price')
 def get_price():
     r = requests.get(
         'https://api.coingecko.com/api/v3/simple/price?ids=helium&vs_currencies=usd')

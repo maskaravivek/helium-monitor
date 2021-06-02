@@ -6,8 +6,6 @@ def handle_response(response={}, status=200):
     if "error" in response:
         return make_response(jsonify(response)), 500 if status == 200 else status
     
-    print('obj', response)
-    print(jsonify(response))
     return make_response(jsonify(response)), status
 
 def docache(minutes=5):
