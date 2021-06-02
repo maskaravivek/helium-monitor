@@ -1,6 +1,6 @@
 const EMRIT_RATIO = 0.2
 
-const USE_PROD_ENDPOINT = true
+const USE_PROD_ENDPOINT = false
 const PROD_API_ENDPOINT = "https://helium-monitor.herokuapp.com"
 const LOCAL_API_ENDPOINT = "http://127.0.0.1:5000"
 
@@ -9,6 +9,7 @@ let API_ENDPOINT = USE_PROD_ENDPOINT ? PROD_API_ENDPOINT : LOCAL_API_ENDPOINT
 
 window.addEventListener('DOMContentLoaded', (event) => {
     migrateOldData()
+    migrateOldDataV2()
     attachEventHandlers();
     showEarningsOrConfigs();
 });
@@ -24,11 +25,11 @@ function showEarningsOrConfigs() {
 function attachEventHandlers() {
     document.getElementById('save_btn').addEventListener("click", function () {
         let hotspot_name_input_val = document.getElementById('hotspot_name').value;
-        let is_emrit = document.getElementById("is_emrit").checked;
+        let percent = document.getElementById("percentage").value;
 
         hotspot_name_input_val = hotspot_name_input_val.toLowerCase().trim().replaceAll(' ', '-')
         if (hotspot_name_input_val !== "" && hotspot_name_input_val !== null && hotspot_name_input_val !== undefined) {
-            addOrEditConfig(hotspot_name_input_val, is_emrit);
+            addOrEditConfig(hotspot_name_input_val, percent);
         }
     });
 
@@ -82,13 +83,7 @@ function setActiveSelection(val) {
 }
 
 function populateSelectBox() {
-    let hotspots = localStorage.getItem("hotspots")
-
-    if (hotspots == null || hotspots == undefined) {
-        return false;
-    }
-
-    hotspots = JSON.parse(hotspots)
+    let hotspots = getHotspots()
 
     let hotspot_select = document.getElementById('device_select')
     let options = []
@@ -104,17 +99,11 @@ function populateSelectBox() {
 }
 
 function removeHotspot(hotspot_name) {
-    let hotspots = localStorage.getItem("hotspots")
-
-    if (hotspots == null || hotspots == undefined) {
-        return false;
-    }
-
-    hotspots = JSON.parse(hotspots)
+    let hotspots = getHotspots()
 
     hotspots.hasOwnProperty(hotspot_name)
     delete hotspots[hotspot_name]
-    localStorage.setItem("hotspots", JSON.stringify(hotspots))
+    setHotspots(hotspots)
 
     displayConfigs()
 }
@@ -125,18 +114,12 @@ function showAddHotspotDiv() {
 }
 
 function hasSavedHotspots() {
-    let hotspots = localStorage.getItem("hotspots")
-
-    if (hotspots == null || hotspots == undefined) {
-        return false;
-    }
-
-    hotspots = JSON.parse(hotspots)
+    let hotspots = getHotspots()
 
     return Object.keys(hotspots).length > 0;
 }
 
-function addOrEditConfig(hotspot_name, is_emrit) {
+function addOrEditConfig(hotspot_name, percent) {
     fetch(`${API_ENDPOINT}/api/v1/device?hotspot_name=${hotspot_name}`)
         .then(response => response.json())
         .then(data => {
@@ -144,19 +127,40 @@ function addOrEditConfig(hotspot_name, is_emrit) {
                 document.getElementById('add_hotspot_error').innerHTML = data['error']
                 return
             }
-            let hotspots = localStorage.getItem("hotspots")
+            let hotspots = getHotspots()
 
-            if (hotspots !== null && hotspots !== undefined) {
-                hotspots = JSON.parse(hotspots)
-            }
-
-            hotspots[hotspot_name] = is_emrit;
-            localStorage.setItem("hotspots", JSON.stringify(hotspots))
+            hotspots[hotspot_name] = percent;
+            setHotspots(hotspots)
             setTimeout(displayConfigs(), 500)
         })
         .catch(err => {
             document.getElementById('add_hotspot_error').innerHTML = "Couldn't add hotspot. Please try again."
         });
+}
+
+function migrateOldDataV2() {
+    let is_migrated = localStorage.getItem('is_migrated_v2') === "true" || false;
+    if (!is_migrated) {
+        let hotspots = localStorage.getItem('hotspots')
+
+        if (hotspots !== null && hotspots !== undefined) {
+            hotspots = JSON.parse(hotspots)
+            for (let key in hotspots) {
+                if (hotspots[key] === "true" || hotspots[key] === true) {
+                    hotspots[key] = 20
+                } else {
+                    hotspots[key] = 100
+                }
+            }
+
+            setHotspots(hotspots)
+        } else {
+            setHotspots({})
+        }
+
+        localStorage.setItem("active_selection", "all-devices")
+        localStorage.setItem("is_migrated_v2", true)
+    }
 }
 
 function migrateOldData() {
@@ -183,15 +187,25 @@ window.addEventListener('focus', (event) => {
 
 function displayConfigs() {
     showConfigsDiv();
-    let hotspots = localStorage.getItem("hotspots")
+    let hotspots = getHotspots()
+    showhotspots(Object.keys(hotspots))
+}
+
+function getHotspots() {
+    let hotspots = localStorage.getItem("hotspots_v2")
 
     if (hotspots == null || hotspots == undefined) {
-        return
+        return {}
     }
 
     hotspots = JSON.parse(hotspots)
-    showhotspots(Object.keys(hotspots))
+    return hotspots
 }
+
+function setHotspots(data) {
+    localStorage.setItem("hotspots_v2", JSON.stringify(data))
+}
+
 
 function showLoadingIndicator(isVisible) {
     if (isVisible) {
@@ -241,13 +255,12 @@ function showhotspots(hotspots) {
 }
 
 function fetchAndDisplayEarnings() {
-    let hotspots = localStorage.getItem("hotspots")
+    let hotspots = getHotspots()
 
-    if (hotspots == null || hotspots == undefined) {
+    if (Object.keys(hotspots).length === 0) {
         return
     }
 
-    hotspots = JSON.parse(hotspots)
     let request = {
         "hotspots": hotspots
     }

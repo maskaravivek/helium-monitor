@@ -90,7 +90,6 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
 def get_hotspot_earnings_with_emrit_factor(hotspot_name, is_emrit):
     earnings = get_hotspot_earnings(hotspot_name)
     if is_emrit:
-        print('inside is emrit', hotspot_name)
         earnings["latest_window"] = earnings["latest_window"] * EMRIT_RATIO
         earnings["last_day"] = earnings["last_day"] * EMRIT_RATIO
         earnings["summary_window"] = earnings["summary_window"] * EMRIT_RATIO
@@ -133,20 +132,19 @@ def get_multi_hotspot_earnings(hotspots):
     }
 
 
-def get_hotspot_earnings_with_emrit_factor_v2(hotspot_name, is_emrit):
+def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage):
     earnings = get_hotspot_earnings(hotspot_name)
-    print('inside is emrit', hotspot_name)
-    earnings["latest_window"] = earnings["latest_window"] * is_emrit / 100
-    earnings["last_day"] = earnings["last_day"] * is_emrit / 100
-    earnings["summary_window"] = earnings["summary_window"] * is_emrit / 100
-    earnings["7_days_window"] = earnings["7_days_window"] * is_emrit / 100
+    earnings["latest_window"] = earnings["latest_window"] * percentage / 100
+    earnings["last_day"] = earnings["last_day"] * percentage / 100
+    earnings["summary_window"] = earnings["summary_window"] * percentage / 100
+    earnings["7_days_window"] = earnings["7_days_window"] * percentage / 100
 
     return earnings
 
 
 def get_multi_hotspot_earnings_v2(hotspots):
-    device_wise_earnings = [get_hotspot_earnings_with_emrit_factor_v2(
-        hotspot_name, is_emrit) for (hotspot_name, is_emrit) in hotspots.items()]
+    device_wise_earnings = [get_hotspot_earnings_with_percentage_factor_v2(
+        hotspot_name, float(percent)) for (hotspot_name, percent) in hotspots.items()]
 
     total_latest_window_earnings = 0.0
     total_last_day_earnings = 0.0
