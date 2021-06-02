@@ -1,6 +1,6 @@
 const EMRIT_RATIO = 0.2
 
-const USE_PROD_ENDPOINT = false
+const USE_PROD_ENDPOINT = true
 const PROD_API_ENDPOINT = "https://helium-monitor.herokuapp.com"
 const LOCAL_API_ENDPOINT = "http://127.0.0.1:5000"
 
