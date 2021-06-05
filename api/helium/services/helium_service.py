@@ -132,6 +132,7 @@ def get_multi_hotspot_earnings(hotspots):
         "devices": device_wise_earnings
     }
 
+@cache.memoize(300)
 def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, currency='usd'):
     earnings = get_hotspot_earnings(hotspot_name, currency=currency)
     earnings["latest_window"] = earnings["latest_window"] * percentage / 100
@@ -175,7 +176,7 @@ def get_multi_hotspot_earnings_v2(hotspots, currency):
         "devices": device_wise_earnings
     }
 
-
+@cache.memoize(3600)
 def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
 
@@ -197,7 +198,7 @@ def get_hotspot_details(hotspot_name):
 
     return {"error": "Couldn't find a matching device"}
 
-
+@cache.memoize(3600)
 def get_price(currency='usd'):
     r = requests.get(
         'https://api.coingecko.com/api/v3/simple/price?ids=helium&vs_currencies={currency}'.format(currency=currency))
