@@ -1,6 +1,6 @@
 const EMRIT_RATIO = 0.2
 
-const USE_PROD_ENDPOINT = false
+const USE_PROD_ENDPOINT = true
 const PROD_API_ENDPOINT = "https://helium-monitor.herokuapp.com"
 const LOCAL_API_ENDPOINT = "http://127.0.0.1:5000"
 
@@ -71,6 +71,10 @@ function attachEventHandlers() {
         setActiveSelection(event.target.value)
         displayEarnings()
     });
+
+    document.getElementById('currency_select').addEventListener("change", (event) => {
+        setActiveCurrency(event.target.value)
+    });
 }
 
 function setActiveSelection(val) {
@@ -80,6 +84,12 @@ function setActiveSelection(val) {
     } else {
         document.getElementById("web_btn").disabled = false;
     }
+}
+
+function setActiveCurrency(val) {
+    var currencySplit = val.split(",");
+    localStorage.setItem("active_currency", currencySplit[0])
+    localStorage.setItem("active_currency_symbol", currencySplit[1])
 }
 
 function populateSelectBox() {
@@ -198,13 +208,26 @@ function fetchAppConfigsAndDisplay() {
     })
         .then(response => response.json())
         .then(data => {
-            displayConfigItems(data)
+            populateCurrencies(data['currencies'])
+            displayConfigItems(data['configs'])
         })
         .catch(err => {
             console.log(err)
             document.getElementById('coffee_btn').classList.add('is-hidden')
             document.getElementById('new_hotspot_link').classList.add('is-hidden')
         })
+}
+
+function populateCurrencies(data) {
+    let currency_select = document.getElementById('currency_select')
+    let options = []
+
+    Object.keys(data).forEach((currency) => {
+        options.push(`<option value="${data[currency]['id']},${data[currency]['currencySymbol']}">${data[currency]['currencyName']} (${data[currency]['currencySymbol']})</option>`)
+    })
+
+    currency_select.innerHTML = options.join('')
+    currency_select.value = getActiveCurrency() + ',' + getActiveCurrencySymbol()
 }
 
 function displayConfigItems(data) {
@@ -245,6 +268,26 @@ function showLoadingIndicator(isVisible) {
         document.getElementById('refresh_btn_icon').style.display = 'block'
     }
 
+}
+
+function getActiveCurrency() {
+    let active_currency = localStorage.getItem("active_currency")
+    if (active_currency == null || active_currency == undefined) {
+        localStorage.setItem("active_currency", "usd")
+        localStorage.setItem("active_currency_symbol", "$")
+        active_currency = "usd"
+    }
+    return active_currency
+}
+
+function getActiveCurrencySymbol() {
+    let active_currency_symbol = localStorage.getItem("active_currency_symbol")
+    if (active_currency_symbol == null || active_currency_symbol == undefined) {
+        localStorage.setItem("active_currency", "usd")
+        localStorage.setItem("active_currency_symbol", "$")
+        active_currency_symbol = "$"
+    }
+    return active_currency_symbol
 }
 
 function displayHotspotEarnings() {
@@ -289,7 +332,8 @@ function fetchAndDisplayEarnings() {
     }
 
     let request = {
-        "hotspots": hotspots
+        "hotspots": hotspots,
+        "currency": getActiveCurrency()
     }
 
     fetch(`${API_ENDPOINT}/api/v1/earningsv2`, {
@@ -335,6 +379,7 @@ function displayEarnings() {
     const last_7_days = parseFloat(data['7_days_window']);
     const last_30_days = parseFloat(data['summary_window']);
     const price = parseFloat(data['price'])
+    const currency_symbol = getActiveCurrencySymbol()
 
     if (getStatus(data, is_cumulative) === "offline") {
         document.getElementById('status_icon').src = 'assets/offline.png';
@@ -350,13 +395,13 @@ function displayEarnings() {
     }
 
     document.getElementById('last-day-window-hnt').innerHTML = `${last_24_hours.toFixed(2)} HNT`;
-    document.getElementById('last-day-window-usd').innerHTML = `$ ${(last_24_hours * price).toFixed(2)}`;
+    document.getElementById('last-day-window-usd').innerHTML = `${currency_symbol} ${(last_24_hours * price).toFixed(2)}`;
 
     document.getElementById('last-7-day-window-hnt').innerHTML = `${last_7_days.toFixed(2)} HNT`;
-    document.getElementById('last-7-day-window-usd').innerHTML = `$ ${(last_7_days * price).toFixed(2)}`;
+    document.getElementById('last-7-day-window-usd').innerHTML = `${currency_symbol} ${(last_7_days * price).toFixed(2)}`;
 
     document.getElementById('summary-window-hnt').innerHTML = `${last_30_days.toFixed(2)} HNT`;
-    document.getElementById('summary-window-usd').innerHTML = `$ ${(last_30_days * price).toFixed(2)}`;
+    document.getElementById('summary-window-usd').innerHTML = `${currency_symbol} ${(last_30_days * price).toFixed(2)}`;
 }
 
 function getStatus(data, is_cumulative) {

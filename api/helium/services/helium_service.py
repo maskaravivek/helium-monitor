@@ -132,6 +132,7 @@ def get_multi_hotspot_earnings(hotspots):
         "devices": device_wise_earnings
     }
 
+
 @cache.memoize(300)
 def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, currency='usd'):
     earnings = get_hotspot_earnings(hotspot_name, currency=currency)
@@ -176,6 +177,7 @@ def get_multi_hotspot_earnings_v2(hotspots, currency):
         "devices": device_wise_earnings
     }
 
+
 @cache.memoize(3600)
 def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
@@ -198,6 +200,7 @@ def get_hotspot_details(hotspot_name):
 
     return {"error": "Couldn't find a matching device"}
 
+
 @cache.memoize(3600)
 def get_price(currency='usd'):
     r = requests.get(
@@ -218,6 +221,24 @@ def send_earning_update_to_telegram(hotspot_name, token, chat_id):
 
 def get_app_config():
     return {
-        "show_bmc": False,
-        "show_referral": False
+        "configs": {
+            "show_bmc": True,
+            "show_referral": True
+        },
+        "currencies": get_supported_currencies()
+    }
+
+
+def get_supported_currencies():
+    return {
+        "eur": {
+            "currencyName": "Euro",
+            "currencySymbol": "€",
+            "id": "eur"
+        },
+        "usd": {
+            "currencyName": "United States Dollar",
+            "currencySymbol": "$",
+            "id": "usd"
+        }
     }

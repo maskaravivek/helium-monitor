@@ -51,6 +51,12 @@ def get_config():
 
     return handle_response(response)
 
+@summary_api.route(COMMON_PREFIX + "/currencies", methods=['GET'])
+@cache.cached(timeout=300)
+def supported_currencies():
+    response = helium_service.get_supported_currencies()
+
+    return handle_response(response)
 
 @summary_api.route(COMMON_PREFIX + "/earnings-bot", methods=['GET'])
 def earnings_bot_api():
