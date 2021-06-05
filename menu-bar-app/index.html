@@ -27,25 +27,31 @@
                     </div>
                 </div>
                 <div>
-                    <div id='hotspot_list' class='tags'>
-                        <span class="tag is-success">Bar<button class="delete is-small"></button></span>
+                    <div id='hotspot_div'>
+                        <span class="is-size-7">Manage Hotspots</span><br /><br />
+                        <div id='hotspot_list' class='tags'>
+
+                        </div>
                     </div>
                     <div style="display: none;" id="add_new_hotspot_div">
                         <input placeholder="Enter Hotspot Name. Eg. spare-fleece-urchin" class="input is-primary mt-3"
                             type="text" id="hotspot_name" name="hotspot_name"><br />
                         <span style="font-size: 10px; color: red;" id="add_hotspot_error"></span><br />
                         <label class="checkbox mt-3">
-                            Enter your % share: <input class="input is-primary" id="percentage" type="number" min="0" max="100" value="100">
+                            Enter your % share: <input class="input is-primary" id="percentage" type="number" min="0"
+                                max="100" value="100">
                         </label> <br />
                         <button class="button is-primary mt-3" id='save_btn' type="save" value="save">Save</button>
                         <button class="button mt-3" id='cancel_btn' type="cancel" value="cancel">Cancel</button>
                     </div>
 
                     <div style="text-align: center">
-                        <button id='coffee_btn' class="button is-half is-centered is-primary mt-6 has-text-centered">
+                        <button id='coffee_btn' class="button is-half is-centered is-primary mt-6 has-text-centered is-hidden">
                             <img width="128" src="assets/buy-me-a-coffee.png">
-                        </button>
+                        </button> <br/><br/>
+                        <a id='new_hotspot_link' class="is-hidden" href="https://www.nebra.com/?ref=i0nmbh_csmsh">Buy a new Hotspot</a>
                     </div>
+
 
                 </div>
             </div>

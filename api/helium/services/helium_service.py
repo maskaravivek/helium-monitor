@@ -220,6 +220,6 @@ def send_earning_update_to_telegram(hotspot_name, token, chat_id):
 
 def get_app_config():
     return {
-        "show_bmc": False,
-        "show_referral": False
+        "show_bmc": True,
+        "show_referral": True
     }

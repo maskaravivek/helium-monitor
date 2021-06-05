@@ -1,6 +1,6 @@
 const EMRIT_RATIO = 0.2
 
-const USE_PROD_ENDPOINT = true
+const USE_PROD_ENDPOINT = false
 const PROD_API_ENDPOINT = "https://helium-monitor.herokuapp.com"
 const LOCAL_API_ENDPOINT = "http://127.0.0.1:5000"
 
@@ -198,17 +198,24 @@ function fetchAppConfigsAndDisplay() {
     })
         .then(response => response.json())
         .then(data => {
-            displayConfigItems()
+            displayConfigItems(data)
         })
         .catch(err => {
             console.log(err)
+            document.getElementById('coffee_btn').classList.add('is-hidden')
+            document.getElementById('new_hotspot_link').classList.add('is-hidden')
         })
 }
 
 function displayConfigItems(data) {
     let is_bmc_visible = data['show_bmc']
     let referral_visible = data['show_referral']
-    document.getElementById('coffee_btn').style.display = is_bmc_visible ? 'block' : 'none'
+    if (is_bmc_visible) {
+        document.getElementById('coffee_btn').classList.remove('is-hidden')
+    }
+    if (referral_visible) {
+        document.getElementById('new_hotspot_link').classList.remove('is-hidden')
+    }
 }
 
 function getHotspots() {
@@ -303,11 +310,11 @@ function fetchAndDisplayEarnings() {
 }
 
 function displayEarnings() {
-    let earning_resp = localStorage.getItem('earnings_resp')
-    if (earning_resp === null || earning_resp === undefined) {
+    let earnings_resp = localStorage.getItem('earnings_resp')
+    if (earnings_resp === null || earnings_resp === undefined) {
         return
     }
-    earnings_resp = JSON.parse(earning_resp)
+    earnings_resp = JSON.parse(earnings_resp)
     let active_selection = localStorage.getItem('active_selection')
     let is_cumulative = active_selection === 'all-devices'
     let data = {}

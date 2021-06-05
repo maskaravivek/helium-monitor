@@ -49,7 +49,7 @@ def get_device_details():
 
 @summary_api.route(COMMON_PREFIX + "/config", methods=['GET'])
 @cache.cached(timeout=300)
-def get_device_details():
+def get_config():
     response = helium_service.get_app_config()
 
     return handle_response(response)
