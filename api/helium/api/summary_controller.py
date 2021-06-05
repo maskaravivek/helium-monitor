@@ -28,6 +28,7 @@ def get_multi_device_earnings_api():
 
     return handle_response(response)
 
+
 @summary_api.route(COMMON_PREFIX + "/earningsv2", methods=['POST'])
 @cache.cached(timeout=30)
 def get_multi_device_earnings_api_v2():
@@ -42,6 +43,14 @@ def get_multi_device_earnings_api_v2():
 def get_device_details():
     hotspot_name = request.args.get('hotspot_name')
     response = helium_service.get_hotspot_details(hotspot_name)
+
+    return handle_response(response)
+
+
+@summary_api.route(COMMON_PREFIX + "/config", methods=['GET'])
+@cache.cached(timeout=300)
+def get_device_details():
+    response = helium_service.get_app_config()
 
     return handle_response(response)
 

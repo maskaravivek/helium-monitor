@@ -176,6 +176,7 @@ def get_multi_hotspot_earnings_v2(hotspots):
         "devices": device_wise_earnings
     }
 
+
 @cache.memoize(timeout=120, make_name='device_details')
 def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
@@ -198,6 +199,7 @@ def get_hotspot_details(hotspot_name):
 
     return {"error": "Couldn't find a matching device"}
 
+
 @cache.cached(timeout=120, key_prefix='helium_price')
 def get_price():
     r = requests.get(
@@ -214,3 +216,10 @@ def send_earning_update_to_telegram(hotspot_name, token, chat_id):
         telegram_bot_sendtext(token, chat_id, message)
 
     return {"status": "success"}
+
+
+def get_app_config():
+    return {
+        "show_bmc": False,
+        "show_referral": False
+    }

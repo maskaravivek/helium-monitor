@@ -189,6 +189,26 @@ function displayConfigs() {
     showConfigsDiv();
     let hotspots = getHotspots()
     showhotspots(Object.keys(hotspots))
+    fetchAppConfigsAndDisplay()
+}
+
+function fetchAppConfigsAndDisplay() {
+    fetch(`${API_ENDPOINT}/api/v1/config`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            displayConfigItems()
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+function displayConfigItems(data) {
+    let is_bmc_visible = data['show_bmc']
+    let referral_visible = data['show_referral']
+    document.getElementById('coffee_btn').style.display = is_bmc_visible ? 'block' : 'none'
 }
 
 function getHotspots() {
@@ -283,7 +303,11 @@ function fetchAndDisplayEarnings() {
 }
 
 function displayEarnings() {
-    let earnings_resp = JSON.parse(localStorage.getItem('earnings_resp'))
+    let earning_resp = localStorage.getItem('earnings_resp')
+    if (earning_resp === null || earning_resp === undefined) {
+        return
+    }
+    earnings_resp = JSON.parse(earning_resp)
     let active_selection = localStorage.getItem('active_selection')
     let is_cumulative = active_selection === 'all-devices'
     let data = {}
