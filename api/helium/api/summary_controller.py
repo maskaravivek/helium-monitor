@@ -11,7 +11,6 @@ summary_api = Blueprint('summary', __name__)
 
 
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['GET'])
-@cache.cached(timeout=30)
 def get_earnings_api():
     hotspot_name = request.args.get('hotspot_name')
     response = helium_service.get_hotspot_earnings(hotspot_name)
@@ -20,7 +19,6 @@ def get_earnings_api():
 
 
 @summary_api.route(COMMON_PREFIX + "/earnings", methods=['POST'])
-@cache.cached(timeout=30)
 def get_multi_device_earnings_api():
     data = request.json
     hotspots = data['hotspots']
@@ -30,16 +28,15 @@ def get_multi_device_earnings_api():
 
 
 @summary_api.route(COMMON_PREFIX + "/earningsv2", methods=['POST'])
-@cache.cached(timeout=30)
 def get_multi_device_earnings_api_v2():
     data = request.json
     hotspots = data['hotspots']
-    response = helium_service.get_multi_hotspot_earnings_v2(hotspots)
+    currency = data['currency'] if 'currency' in data else 'usd'
+    response = helium_service.get_multi_hotspot_earnings_v2(hotspots, currency)
     return handle_response(response)
 
 
 @summary_api.route(COMMON_PREFIX + "/device", methods=['GET'])
-@cache.cached(timeout=300)
 def get_device_details():
     hotspot_name = request.args.get('hotspot_name')
     response = helium_service.get_hotspot_details(hotspot_name)
@@ -56,7 +53,6 @@ def get_config():
 
 
 @summary_api.route(COMMON_PREFIX + "/earnings-bot", methods=['GET'])
-@cache.cached(timeout=30)
 def earnings_bot_api():
     hotspot_name = request.args.get('hotspot_name')
     token = request.args.get('token')

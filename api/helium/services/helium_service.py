@@ -63,7 +63,7 @@ def earnings_summary(hotspot_id, duration_in_days=30):
     return last_day, last_7_days, total
 
 
-def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summary_duration_in_days=30):
+def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summary_duration_in_days=30, currency='usd'):
     hotspot_details = get_hotspot_details(hotspot_name)
 
     if 'error' in hotspot_details:
@@ -76,7 +76,7 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
     last_day_earnings, last_7_days_earnings, summary_earnings = earnings_summary(
         hotspot_id, duration_in_days=summary_duration_in_days)
 
-    price = get_price()
+    price = get_price(currency)
 
     return {
         "latest_window": last_window_earnings,
@@ -132,9 +132,8 @@ def get_multi_hotspot_earnings(hotspots):
         "devices": device_wise_earnings
     }
 
-
-def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage):
-    earnings = get_hotspot_earnings(hotspot_name)
+def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, currency='usd'):
+    earnings = get_hotspot_earnings(hotspot_name, currency=currency)
     earnings["latest_window"] = earnings["latest_window"] * percentage / 100
     earnings["last_day"] = earnings["last_day"] * percentage / 100
     earnings["summary_window"] = earnings["summary_window"] * percentage / 100
@@ -143,9 +142,9 @@ def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage):
     return earnings
 
 
-def get_multi_hotspot_earnings_v2(hotspots):
+def get_multi_hotspot_earnings_v2(hotspots, currency):
     device_wise_earnings = [get_hotspot_earnings_with_percentage_factor_v2(
-        hotspot_name, float(percent)) for (hotspot_name, percent) in hotspots.items()]
+        hotspot_name, float(percent), currency=currency) for (hotspot_name, percent) in hotspots.items()]
 
     total_latest_window_earnings = 0.0
     total_last_day_earnings = 0.0
@@ -177,7 +176,6 @@ def get_multi_hotspot_earnings_v2(hotspots):
     }
 
 
-@cache.memoize(timeout=120, make_name='device_details')
 def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
 
@@ -200,11 +198,10 @@ def get_hotspot_details(hotspot_name):
     return {"error": "Couldn't find a matching device"}
 
 
-@cache.cached(timeout=120, key_prefix='helium_price')
-def get_price():
+def get_price(currency='usd'):
     r = requests.get(
-        'https://api.coingecko.com/api/v3/simple/price?ids=helium&vs_currencies=usd')
-    return r.json()['helium']['usd']
+        'https://api.coingecko.com/api/v3/simple/price?ids=helium&vs_currencies={currency}'.format(currency=currency))
+    return r.json()['helium'][currency]
 
 
 def send_earning_update_to_telegram(hotspot_name, token, chat_id):
