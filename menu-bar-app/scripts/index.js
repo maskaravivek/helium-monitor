@@ -120,7 +120,7 @@ function removeHotspot(hotspot_name) {
 
 function showAddHotspotDiv() {
     document.getElementById('add_new_hotspot_div').style.display = 'block';
-    document.getElementById('hotspot_list').style.display = 'none';
+    document.getElementById('hotspot_div').style.display = 'none';
 }
 
 function hasSavedHotspots() {
@@ -184,6 +184,8 @@ function migrateOldData() {
             hotspot_dict[hotspot] = is_emrit
 
             localStorage.setItem("hotspots", JSON.stringify(hotspot_dict))
+        } else {
+            localStorage.setItem("hotspots", JSON.stringify({}))
         }
 
         localStorage.setItem("active_selection", "all-devices")
@@ -291,6 +293,7 @@ function getActiveCurrencySymbol() {
 }
 
 function displayHotspotEarnings() {
+    displayEarnings()
     showEarningsDiv();
     showLoadingIndicator(true)
     fetchAndDisplayEarnings();
@@ -301,14 +304,14 @@ function displayHotspotEarnings() {
 function showConfigsDiv() {
     document.getElementById('configs-div').style.display = "block";
     document.getElementById('earnings-div').style.display = "none";
-    document.getElementById('hotspot_list').style.display = 'block';
+    document.getElementById('hotspot_div').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
 }
 
 function showEarningsDiv() {
     document.getElementById('configs-div').style.display = "none";
     document.getElementById('earnings-div').style.display = "block";
-    document.getElementById('hotspot_list').style.display = 'none';
+    document.getElementById('hotspot_div').style.display = 'none';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
 }
 

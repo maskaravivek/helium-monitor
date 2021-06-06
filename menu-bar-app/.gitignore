@@ -1,3 +1,7 @@
 node_modules/*
 dist/*
 .DS_Store
+build/Info.plist
+build/embedded.provisionprofile
+build/entitlements.mas.plist
+build/resignAndPackage.sh

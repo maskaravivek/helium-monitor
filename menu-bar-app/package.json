@@ -4,6 +4,7 @@
   "description": "Helium hotspot monitor",
   "homepage": "https://github.com/maskaravivek/helium-monitor",
   "main": "myApp.js",
+  "productName": "Helium Monitor",
   "repository": "https://github.com/maskaravivek/helium-monitor",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,10 +12,30 @@
     "start": "npm install && electron ./app",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
+    "dist-mac": "electron-builder && bash build/resignAndPackage.sh",
     "dist-all": "electron-builder -mwl"
   },
   "build": {
     "appId": "com.maskaravivek.heliummonitor",
+    "files": [
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/build/**",
+      "!**/mainprocess/**",
+      "!**/src/**",
+      "!.gitignore",
+      "!package-lock.json"
+    ],
     "dmg": {
       "contents": [
         {
@@ -28,6 +49,16 @@
           "path": "/Applications"
         }
       ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "hardenedRuntime": false,
+      "icon": "build/icon.icns",
+      "target": "mas",
+      "provisioningProfile": "build/embedded.provisionprofile",
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "type": "distribution"
     },
     "linux": {
       "maintainer": "Vivek Maskara",
@@ -51,6 +82,7 @@
   },
   "devDependencies": {
     "electron": "^12.0.7",
-    "electron-builder": "^22.10.5"
+    "electron-builder": "^22.10.5",
+    "electron-packager": "^15.2.0"
   }
 }
