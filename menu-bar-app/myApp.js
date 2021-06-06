@@ -27,6 +27,8 @@ const { app, ipcMain, autoUpdater } = require('electron')
 //   })
 // })
 
+app.commandLine.appendSwitch('ignore-certificate-errors', true);
+
 const mb = menubar({
   showDockIcon: false,
   icon: path.join(__dirname, 'assets', 'icon.png'),
