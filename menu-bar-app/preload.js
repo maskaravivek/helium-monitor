@@ -14,5 +14,9 @@ window.addEventListener('DOMContentLoaded', () => {
         let active_hotspot_id = localStorage.getItem('active_hotspot_id')
         const reply = ipc.sendSync('hotspot-event', active_hotspot_id)
     });
+
+    document.getElementById('emrit_hotspot_link').addEventListener("click", function () {
+        const reply = ipc.sendSync('emrit-signup-event', 'New Emrit Hotspot')
+    });
 })
 

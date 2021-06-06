@@ -2,6 +2,18 @@ const { menubar } = require('menubar');
 const path = require('path');
 const { app, ipcMain, autoUpdater } = require('electron')
 
+// const { app, BrowserWindow } = require('electron')
+
+// const debug = require('electron-debug');
+
+// debug();
+
+// let mainWindow;
+// (async () => {
+// 	await app.whenReady();
+// 	mainWindow = new BrowserWindow();
+// })();
+
 // const UPDATE_CHECK_INTERVAL = 10 * 60 * 1000
 
 // const server = "https://hazel-ten-rho.vercel.app"
@@ -63,4 +75,9 @@ ipcMain.on('new-hotspot-event', (event, arg) => {
 ipcMain.on('hotspot-event', (event, arg) => {
   event.returnValue = 'Message received!'
   require('electron').shell.openExternal(`https://explorer.helium.com/hotspots/${arg}`);
+})
+
+ipcMain.on('emrit-signup-event', (event, arg) => {
+  event.returnValue = 'Message received!'
+  require('electron').shell.openExternal('https://docs.google.com/forms/d/e/1FAIpQLScynuDQP9TR1a9_hpg89IkwIV_wrXA78NSSbRsz3w5HZ8uNYg/viewform');
 })
