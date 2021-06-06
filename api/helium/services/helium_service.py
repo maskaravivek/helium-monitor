@@ -258,6 +258,7 @@ def get_supported_currencies():
         },
         "aed": {
             "currencyName": "UAE Dirham",
+            "currencySymbol": "د.إ",
             "id": "aed"
         },
         "nok": {
