@@ -222,8 +222,8 @@ def send_earning_update_to_telegram(hotspot_name, token, chat_id):
 def get_app_config():
     return {
         "configs": {
-            "show_bmc": True,
-            "show_referral": True
+            "show_bmc": False,
+            "show_referral": False
         },
         "currencies": get_supported_currencies()
     }
@@ -240,5 +240,39 @@ def get_supported_currencies():
             "currencyName": "United States Dollar",
             "currencySymbol": "$",
             "id": "usd"
+        },
+        "gbp": {
+            "currencyName": "British Pound",
+            "currencySymbol": "£",
+            "id": "gbp"
+        },
+        "cad": {
+            "currencyName": "Canadian Dollar",
+            "currencySymbol": "$",
+            "id": "cad"
+        },
+        "inr": {
+            "currencyName": "Indian Rupee",
+            "currencySymbol": "₹",
+            "id": "inr"
+        },
+        "aed": {
+            "currencyName": "UAE Dirham",
+            "id": "aed"
+        },
+        "nok": {
+            "currencyName": "Norwegian Krone",
+            "currencySymbol": "kr",
+            "id": "nok"
+        },
+        "huf": {
+            "currencyName": "Hungarian Forint",
+            "currencySymbol": "Ft",
+            "id": "huf"
+        },
+        "hkd": {
+            "currencyName": "Hong Kong Dollar",
+            "currencySymbol": "$",
+            "id": "hkd"
         }
     }
