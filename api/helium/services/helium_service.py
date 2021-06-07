@@ -222,8 +222,8 @@ def send_earning_update_to_telegram(hotspot_name, token, chat_id):
 def get_app_config():
     return {
         "configs": {
-            "show_bmc": False,
-            "show_referral": False
+            "show_bmc": True,
+            "show_referral": True
         },
         "currencies": get_supported_currencies()
     }
