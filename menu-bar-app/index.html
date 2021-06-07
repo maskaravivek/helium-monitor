@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Helium Monitor</title>
     <link rel="stylesheet" href="css/bulma.min.css">
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvoam3EcmnTqreUvVB-jL7oL-JjTOCmMk&libraries=places&callback=initAutocomplete"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrAiZvSDHjw6fkLR-KQ40LztUmoXgXw5w&libraries=places&callback=initAutocomplete"></script>
     <script>
         function initAutocomplete() {
             var geocoder = new google.maps.Geocoder();
@@ -166,6 +166,10 @@
                         <span>Configure</span>
                     </div>
                     <div style="text-align: right;" class='column ml-1'>
+                        <button style="border: none;" id='hotspot_btn' class="button">
+                            <img id='hotspot_btn_icon' style="cursor:pointer;" title="Check eligibility for new hotspot" height="24"
+                                width="24" src="assets/hotspot.png">
+                        </button>
                         <button style="border: none;" id='add_btn' class="button">
                             <img id='add_btn_icon' style="cursor:pointer;" title="Add new hotspot" height="24"
                                 width="24" src="assets/add.png">
@@ -184,7 +188,23 @@
                             <select id="currency_select">
                             </select>
                         </div><br /><br />
-
+                    </div>
+                    <div style="display: none;" id="add_new_hotspot_div">
+                        <div>
+                            <input placeholder="Enter Hotspot Name. Eg. spare-fleece-urchin"
+                                class="input is-primary mt-3" type="text" id="hotspot_name" name="hotspot_name"><br />
+                            <span style="font-size: 10px; color: red;" id="add_hotspot_error"></span><br />
+                        </div>
+                        <div>
+                            <span style="vertical-align: middle;">Your % share:</span> <input class="input is-primary"
+                                style="width: 40%;" id="percentage" type="number" min="0" max="100" value="100">
+                            <span style="float: right;">
+                                <button class="button is-primary" id='save_btn' type="save" value="save">Save</button>
+                                <button class="button ml-1" id='cancel_btn' type="cancel" value="cancel">Cancel</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div style="display: none;" id="check_hotspot_eligibility_div">
                         <h3><b>Check to see hotspot eligibility!</b></h3>
 
                         <span class='mr-6' style="font-size: 1.05em;" id='nearby_hotspot_status'></span><br />
@@ -207,21 +227,6 @@
                             </div>
                         </div>
                         <div id="map" style="height:20em; width:35em"></div>
-                    </div>
-                    <div style="display: none;" id="add_new_hotspot_div">
-                        <div>
-                            <input placeholder="Enter Hotspot Name. Eg. spare-fleece-urchin"
-                                class="input is-primary mt-3" type="text" id="hotspot_name" name="hotspot_name"><br />
-                            <span style="font-size: 10px; color: red;" id="add_hotspot_error"></span><br />
-                        </div>
-                        <div>
-                            <span style="vertical-align: middle;">Your % share:</span> <input class="input is-primary"
-                                style="width: 40%;" id="percentage" type="number" min="0" max="100" value="100">
-                            <span style="float: right;">
-                                <button class="button is-primary" id='save_btn' type="save" value="save">Save</button>
-                                <button class="button ml-1" id='cancel_btn' type="cancel" value="cancel">Cancel</button>
-                            </span>
-                        </div>
                     </div>
 
                     <div style="text-align: center">

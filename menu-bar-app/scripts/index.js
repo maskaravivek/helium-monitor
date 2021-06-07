@@ -59,6 +59,10 @@ function attachEventHandlers() {
         showAddHotspotDiv();
     });
 
+    document.getElementById('hotspot_btn').addEventListener("click", function () {
+        showHotspotEligibilityDiv();
+    });
+
     document.getElementById('edit_configs').addEventListener("click", function () {
         displayConfigs();
     });
@@ -124,6 +128,13 @@ function removeHotspot(hotspot_name) {
 
 function showAddHotspotDiv() {
     document.getElementById('add_new_hotspot_div').style.display = 'block';
+    document.getElementById('hotspot_div').style.display = 'none';
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
+}
+
+function showHotspotEligibilityDiv(){
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'block';
+    document.getElementById('add_new_hotspot_div').style.display = 'none';
     document.getElementById('hotspot_div').style.display = 'none';
 }
 
@@ -340,6 +351,7 @@ function showConfigsDiv() {
     document.getElementById('earnings-div').style.display = "none";
     document.getElementById('hotspot_div').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
 }
 
 function showEarningsDiv() {
@@ -347,6 +359,7 @@ function showEarningsDiv() {
     document.getElementById('earnings-div').style.display = "block";
     document.getElementById('hotspot_div').style.display = 'none';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
 }
 
 function showhotspots(hotspots) {
