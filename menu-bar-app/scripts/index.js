@@ -59,6 +59,10 @@ function attachEventHandlers() {
         showAddHotspotDiv();
     });
 
+    document.getElementById('hotspot_btn').addEventListener("click", function () {
+        showHotspotEligibilityDiv();
+    });
+
     document.getElementById('edit_configs').addEventListener("click", function () {
         displayConfigs();
     });
@@ -74,6 +78,10 @@ function attachEventHandlers() {
 
     document.getElementById('currency_select').addEventListener("change", (event) => {
         setActiveCurrency(event.target.value)
+    });
+
+    document.getElementById('nearby_hotspots').addEventListener("change", (event) => {
+        getHotspotsinRange(event.target.value)
     });
 }
 
@@ -120,6 +128,13 @@ function removeHotspot(hotspot_name) {
 
 function showAddHotspotDiv() {
     document.getElementById('add_new_hotspot_div').style.display = 'block';
+    document.getElementById('hotspot_div').style.display = 'none';
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
+}
+
+function showHotspotEligibilityDiv(){
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'block';
+    document.getElementById('add_new_hotspot_div').style.display = 'none';
     document.getElementById('hotspot_div').style.display = 'none';
 }
 
@@ -254,6 +269,36 @@ function getHotspots() {
     return hotspots
 }
 
+function getHotspotsinRange(val) {
+    var json = JSON.parse(val)
+    json = json['data']
+    var tot_hotspots = json.length;
+
+    var obj = json[0];
+
+    if (tot_hotspots == 0) {
+        var dist = 1000
+    }
+    else {
+        var lat1 = document.getElementById('latitude').value;
+        var lng1 = document.getElementById('longitude').value;
+        var lat2 = obj.lat;
+        var lng2 = obj.lng;
+
+        var dist = distance(lat1, lng1, lat2, lng2) * 1000
+    }
+
+    var nhs = "Number of hotspots nearby: " + String(tot_hotspots) + '<br />';
+    if (dist < 300) {
+        document.getElementById('emrit_hotspot_link').classList.add("is-hidden")
+        document.getElementById('nearby_hotspot_status').innerHTML = nhs + "You are not eligible for a hotspot! :(";
+    }
+    else {
+        document.getElementById('emrit_hotspot_link').classList.remove("is-hidden")
+        document.getElementById('nearby_hotspot_status').innerHTML = nhs + "You are eligible for a free hotspot! Sign up below to get yours now. :D";
+    }
+}
+
 function setHotspots(data) {
     localStorage.setItem("hotspots_v2", JSON.stringify(data))
 }
@@ -306,6 +351,7 @@ function showConfigsDiv() {
     document.getElementById('earnings-div').style.display = "none";
     document.getElementById('hotspot_div').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
 }
 
 function showEarningsDiv() {
@@ -313,6 +359,7 @@ function showEarningsDiv() {
     document.getElementById('earnings-div').style.display = "block";
     document.getElementById('hotspot_div').style.display = 'none';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
+    document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
 }
 
 function showhotspots(hotspots) {
@@ -413,4 +460,24 @@ function getStatus(data, is_cumulative) {
     } else {
         return data['device_details']['status']
     }
+}
+
+function distance(lat1, lon1, lat2, lon2) {
+	if ((lat1 == lat2) && (lon1 == lon2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = lon1-lon2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515 * 1.609344;
+		return dist;
+	}
 }
