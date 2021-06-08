@@ -61,7 +61,7 @@ mb.on('ready', () => {
 });
 
 mb.on('after-create-window', () => {
-  //  mb.window.openDevTools()
+  mb.window.openDevTools()
 })
 
 ipcMain.on('bmc-event', (event, arg) => {

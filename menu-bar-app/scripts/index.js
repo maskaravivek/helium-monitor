@@ -83,6 +83,33 @@ function attachEventHandlers() {
     document.getElementById('nearby_hotspots').addEventListener("change", (event) => {
         getHotspotsinRange(event.target.value)
     });
+
+    if (!isElectronApp()) {
+        webSpecificEvents()
+    }
+}
+
+function isElectronApp() {
+    return navigator.userAgent.includes("Electron")
+}
+
+function webSpecificEvents() {
+    document.getElementById('coffee_btn').addEventListener("click", function () {
+        window.open("https://www.buymeacoffee.com/maskara", '_blank');
+    });
+
+    document.getElementById('new_hotspot_link').addEventListener("click", function () {
+        window.open("https://www.nebra.com/?ref=i0nmbh_csmsh", '_blank');
+    });
+
+    document.getElementById('web_btn').addEventListener("click", function () {
+        let active_hotspot_id = localStorage.getItem('active_hotspot_id')
+        window.open(`https://explorer.helium.com/hotspots/${active_hotspot_id}`, '_blank');
+    });
+
+    document.getElementById('emrit_hotspot_link').addEventListener("click", function () {
+        window.open("https://docs.google.com/forms/d/e/1FAIpQLScynuDQP9TR1a9_hpg89IkwIV_wrXA78NSSbRsz3w5HZ8uNYg/viewform", '_blank');
+    });
 }
 
 function setActiveSelection(val) {
@@ -132,7 +159,7 @@ function showAddHotspotDiv() {
     document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
 }
 
-function showHotspotEligibilityDiv(){
+function showHotspotEligibilityDiv() {
     document.getElementById('check_hotspot_eligibility_div').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
     document.getElementById('hotspot_div').style.display = 'none';
@@ -463,21 +490,21 @@ function getStatus(data, is_cumulative) {
 }
 
 function distance(lat1, lon1, lat2, lon2) {
-	if ((lat1 == lat2) && (lon1 == lon2)) {
-		return 0;
-	}
-	else {
-		var radlat1 = Math.PI * lat1/180;
-		var radlat2 = Math.PI * lat2/180;
-		var theta = lon1-lon2;
-		var radtheta = Math.PI * theta/180;
-		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-		if (dist > 1) {
-			dist = 1;
-		}
-		dist = Math.acos(dist);
-		dist = dist * 180/Math.PI;
-		dist = dist * 60 * 1.1515 * 1.609344;
-		return dist;
-	}
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    }
+    else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var theta = lon1 - lon2;
+        var radtheta = Math.PI * theta / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515 * 1.609344;
+        return dist;
+    }
 }
