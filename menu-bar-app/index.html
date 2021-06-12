@@ -6,151 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Helium Monitor</title>
     <link rel="stylesheet" href="css/bulma.min.css">
+    <script type="text/javascript" src="map.js"></script>
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrAiZvSDHjw6fkLR-KQ40LztUmoXgXw5w&libraries=places&callback=initAutocomplete"></script>
     <script>
         function initAutocomplete() {
-            var geocoder = new google.maps.Geocoder();
-            var latitude = -33.8688
-            var longitude = 151.2195;
+            var latitude, longitude;
 
-            const map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: latitude, lng: longitude },
-                zoom: 13,
-                mapTypeId: "roadmap",
-            });
-            // Create the search box and link it to the UI element.
-            const input = document.getElementById("pac-input");
-            const searchBox = new google.maps.places.SearchBox(input);
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-            // Bias the SearchBox results towards current map's viewport.
-            map.addListener("bounds_changed", () => {
-                searchBox.setBounds(map.getBounds());
-            });
-            let markers = [];
-            // Listen for the event fired when the user selects a prediction and retrieve
-            // more details for that place.
-            searchBox.addListener("places_changed", () => {
-                const places = searchBox.getPlaces();
-
-                if (places.length == 0) {
-                return;
-                }
-                // Clear out the old markers.
-                markers.forEach((marker) => {
-                marker.setMap(null);
+            if("geolocation" in navigator) {
+                console.log('Location services available')
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    initMap(latitude, longitude);
                 });
-                markers = [];
-                // For each place, get the icon, name and location.
-                const bounds = new google.maps.LatLngBounds();
-                number_places = places.length
-                places.forEach((place) => {
-                if (!place.geometry || !place.geometry.location) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                if (number_places == 1) {
-                    latitude = place.geometry.location.lat();
-                    longitude = place.geometry.location.lng();
-                    document.getElementById('latitude').value = latitude;
-                    document.getElementById('longitude').value = longitude;
-
-                    var url = "https://api.helium.io/v1/hotspots/location/distance?lat=" + latitude + "&lon=" + longitude + "&distance=1000";
-
-                    fetch(url)
-                        .then((response) => {
-                            return response.json();
-                        })
-                        .then((myJson) => {
-                            element = document.getElementById('nearby_hotspots')
-                            element.value = JSON.stringify(myJson);
-                            
-                            var event = new Event('change');
-                            element.dispatchEvent(event);
-                        });
-                }
-
-                // Create a marker for each place.
-                markers.push(
-                    new google.maps.Marker({
-                    map,
-                    position: place.geometry.location,
-                    animation: google.maps.Animation.DROP,
-                    })
-                );
-
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-                });
-
-                map.fitBounds(bounds);
-            });
-
-            google.maps.event.addListener(map, 'click', (event) => {
-                var location = event.latLng;
-
-                if (!location){
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-
-                markers.forEach((marker) => {
-                marker.setMap(null);
-                });
-                markers = [];
-
-                // For each place, get the icon, name and location.
-                const bounds = new google.maps.LatLngBounds();
-
-                latitude = location.lat();
-                longitude = location.lng();
-                document.getElementById('latitude').value = latitude;
-                document.getElementById('longitude').value = longitude;
-
-                // Create a marker for each place.
-                markers.push(
-                    new google.maps.Marker({
-                    map,
-                    position: location,
-                    animation: google.maps.Animation.DROP,
-                    })
-                );
-
-                geocoder.geocode({
-                    'latLng': location
-                }, function (results, status) {
-                    if (status ==
-                        google.maps.GeocoderStatus.OK) {
-                        if (results[1]) {
-                            document.getElementById('pac-input').value = results[1].formatted_address;
-                        } else {
-                            console.log('No results found');
-                        }
-                    } else {
-                        console.log('Geocoder failed due to: ' + status);
-                    }
-                });
-
-                var url = "https://api.helium.io/v1/hotspots/location/distance?lat=" + latitude + "&lon=" + longitude + "&distance=1000";
-
-                fetch(url)
-                    .then((response) => {
-                        return response.json();
-                    })
-                    .then((myJson) => {
-                        element = document.getElementById('nearby_hotspots')
-                        element.value = JSON.stringify(myJson);
-                        
-                        var event = new Event('change');
-                        element.dispatchEvent(event);
-                    });
-
-            });
-
             }
+            else {
+                console.log("Location Services not available!")
+                latitude  = -33.8688;
+                longitude = 151.2195;
+                initMap(latitude, longitude);
+            }
+        }
     </script>
 </head>
 

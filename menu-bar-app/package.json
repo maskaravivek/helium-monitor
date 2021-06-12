@@ -76,6 +76,7 @@
   "author": "vivek maskara, <maskaravivek@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "electron-debug": "^3.2.0",
     "menubar": "^9.0.4",
     "universal-analytics": "^0.4.23",
     "update-electron-app": "^2.0.1"
