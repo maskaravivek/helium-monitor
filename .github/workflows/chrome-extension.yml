@@ -12,14 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Package Chrome extension
-        run: ${{GITHUB_WORKSPACE}}/scripts/package-chrome-extension.sh
+        run: ${{github.workspace}}/scripts/package-chrome-extension.sh
         shell: bash
       - uses: trmcnvn/chrome-addon@v2
         with:
           # extension is only necessary when updating an existing addon,
           # omitting it will create a new addon
           extension: cieamegdfdimhcgokefagiojjidlpbih
-          zip: ${{GITHUB_WORKSPACE}}/build/helium-monitor.zip
+          zip: ${{github.workspace}}/build/helium-monitor.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
