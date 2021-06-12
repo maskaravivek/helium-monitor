@@ -26,7 +26,7 @@ function initMap(latitude, longitude) {
         })
     );
 
-    fetchURL(latitude, longitude, 'init', geocoder);
+    fetchURL(latitude, longitude, 'init', geocoder, markers, map);
 
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
@@ -56,7 +56,7 @@ function initMap(latitude, longitude) {
             document.getElementById('latitude').value = latitude;
             document.getElementById('longitude').value = longitude;
 
-            fetchURL(latitude, longitude, 'placechange', geocoder);
+            fetchURL(latitude, longitude, 'placechange', geocoder, markers, map);
         }
 
         // Create a marker for each place.
@@ -109,12 +109,12 @@ function initMap(latitude, longitude) {
             })
         );
         
-        fetchURL(latitude, longitude, 'click', geocoder);
+        fetchURL(latitude, longitude, 'click', geocoder, markers, map);
 
     });
 }
 
-function fetchURL(latitude, longitude, type, geocoder) {
+function fetchURL(latitude, longitude, type, geocoder, markers, map) {
 
     if (type != 'placechange'){
         geocoder.geocode({
@@ -142,6 +142,41 @@ function fetchURL(latitude, longitude, type, geocoder) {
         .then((myJson) => {
             element = document.getElementById('nearby_hotspots')
             element.value = JSON.stringify(myJson);
+            locations = {}
+            for (const [key, value] of Object.entries(myJson['data']))
+            {   
+                loc_key = value.lat.toString() + ' - ' + value.lng.toString()
+                if (loc_key in locations) {
+                    locations[loc_key]['count'] = locations[loc_key]['count'] + 1
+                }
+                else{
+                    locations[loc_key] = {'lat':value.lat, 'lng':value.lng, 'count':1}
+                }
+            }
+            for (const [key, value] of Object.entries(locations)) {
+                if (value['count'] == 1){
+                    markers.push(
+                        new google.maps.Marker({
+                        map,
+                        position: new google.maps.LatLng(value['lat'], value['lng']),
+                        icon: './assets/signal-tower.png',
+                        title: value['count'].toString() + ' hotspot',
+                        animation: google.maps.Animation.BOUNCE,
+                        })
+                    );
+                }
+                else{
+                    markers.push(
+                        new google.maps.Marker({
+                        map,
+                        position: new google.maps.LatLng(value['lat'], value['lng']),
+                        icon: './assets/signal-tower.png',
+                        title: value['count'].toString() + ' hotspots',
+                        animation: google.maps.Animation.BOUNCE,
+                        })
+                    );
+                }
+            }
             
             var event = new Event('change');
             element.dispatchEvent(event);
