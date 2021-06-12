@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ..
+cd /home/runner/work/helium-monitor/helium-monitor
 mkdir build
 mkdir build/helium-monitor
 cp -R menu-bar-app/ build/helium-monitor/
