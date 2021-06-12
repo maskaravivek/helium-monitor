@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Package Chrome extension
+        run: ./scripts/package-chrome-extension.sh
+        shell: bash
       - uses: trmcnvn/chrome-addon@v2
         with:
           # extension is only necessary when updating an existing addon,
