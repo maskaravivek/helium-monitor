@@ -157,12 +157,14 @@ function showAddHotspotDiv() {
     document.getElementById('add_new_hotspot_div').style.display = 'block';
     document.getElementById('hotspot_div').style.display = 'none';
     document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
+    document.getElementById('configtext').innerText = "Configure";
 }
 
 function showHotspotEligibilityDiv() {
     document.getElementById('check_hotspot_eligibility_div').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
     document.getElementById('hotspot_div').style.display = 'none';
+    document.getElementById('configtext').innerText = "Eligibility";
 }
 
 function hasSavedHotspots() {
@@ -379,6 +381,7 @@ function showConfigsDiv() {
     document.getElementById('hotspot_div').style.display = 'block';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
     document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
+    document.getElementById('configtext').innerText = "Configure";
 }
 
 function showEarningsDiv() {
@@ -387,6 +390,7 @@ function showEarningsDiv() {
     document.getElementById('hotspot_div').style.display = 'none';
     document.getElementById('add_new_hotspot_div').style.display = 'none';
     document.getElementById('check_hotspot_eligibility_div').style.display = 'none';
+    document.getElementById('configtext').innerText = "Configure";
 }
 
 function showhotspots(hotspots) {
