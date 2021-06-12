@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+  	"name": "Helium Monitor",
+    "description": "Track your earnings from helium hotspots",
+    "version": "0.0.0.1",
+    "permissions" : [
+    		"storage",
+        "tabs",
+        "chrome://favicon/"],
+    "chrome_url_overrides" : {
+        "newtab": "index.html"
+    },
+    	"background": {
+		"scripts":["background.js"],
+		"persistent": false
+	}
+ }
