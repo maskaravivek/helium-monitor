@@ -1,6 +1,7 @@
 const { menubar } = require('menubar');
 const path = require('path');
 const { app, ipcMain, autoUpdater } = require('electron')
+process.env.GOOGLE_API_KEY = 'AIzaSyDrAiZvSDHjw6fkLR-KQ40LztUmoXgXw5w'
 
 // const { app, BrowserWindow } = require('electron')
 
