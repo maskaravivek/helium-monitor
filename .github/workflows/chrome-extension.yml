@@ -18,10 +18,10 @@ jobs:
         with:
           # extension is only necessary when updating an existing addon,
           # omitting it will create a new addon
-          extension: cieamegdfdimhcgokefagiojjidlpbih
+          extension: "cieamegdfdimhcgokefagiojjidlpbih"
           zip: ${{github.workspace}}/build/helium-monitor.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
           # optionally specify the visibility of the addon
-          # publishTarget: default
+          publishTarget: default
