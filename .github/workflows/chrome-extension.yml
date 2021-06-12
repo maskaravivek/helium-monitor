@@ -1,0 +1,23 @@
+name: Publish Chrome Extension
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: trmcnvn/chrome-addon@v2
+        with:
+          # extension is only necessary when updating an existing addon,
+          # omitting it will create a new addon
+          extension: abcdefg
+          zip: build/my-addon.zip
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          # optionally specify the visibility of the addon
+          # publishTarget: default
