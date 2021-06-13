@@ -9,4 +9,4 @@ rm -rf node_modules build dist myAApp.js preload.js privacy-policy.html README.m
 cd ..
 zip -r helium-monitor.zip helium-monitor/
 
-# rm -rf helium-monitor
+rm -rf helium-monitor
