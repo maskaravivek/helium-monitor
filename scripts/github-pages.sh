@@ -8,4 +8,5 @@ rm -rf node_modules build dist myAApp.js preload.js README.md yarn.lock package.
 cd ..
 git add .
 git commit -m "Update dist"
+git push origin main
 git subtree push --prefix dist  origin gh-pages
