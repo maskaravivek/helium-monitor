@@ -1,12 +1,9 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Deploy Github Page
 
 # Controls when the action will run. 
-on:
-  push:
-    tags:
-    - '*'
+on: push
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
