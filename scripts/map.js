@@ -37,6 +37,9 @@ function initMap(latitude, longitude) {
         center: { lat: latitude, lng: longitude },
         zoom: 13,
         mapTypeId: "roadmap",
+        mapTypeControlOptions: {
+            position: google.maps.ControlPosition.BOTTOM_CENTER
+        }
     });
 
     // Create the search box and link it to the UI element.
