@@ -6,28 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Helium Monitor</title>
     <link rel="stylesheet" href="css/bulma.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <script type="text/javascript" src="map.js"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrAiZvSDHjw6fkLR-KQ40LztUmoXgXw5w&libraries=places&callback=initAutocomplete"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5H6RXLRZJ9"></script>
     <script>
-        function initAutocomplete() {
-            var latitude, longitude;
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-            if("geolocation" in navigator) {
-                console.log('Location services available')
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    latitude = position.coords.latitude;
-                    longitude = position.coords.longitude;
-                    initMap(latitude, longitude);
-                });
-            }
-            else {
-                console.log("Location Services not available!")
-                latitude  = -33.8688;
-                longitude = 151.2195;
-                initMap(latitude, longitude);
-            }
-        }
+        gtag('config', 'G-5H6RXLRZJ9');
     </script>
 </head>
 
@@ -44,8 +30,8 @@
                     </div>
                     <div style="text-align: right;" class='column ml-1'>
                         <button style="border: none;" id='hotspot_btn' class="button">
-                            <img id='hotspot_btn_icon' style="cursor:pointer;" title="Check eligibility for new hotspot" height="24"
-                                width="24" src="assets/hotspot.png">
+                            <a href="map.html"><img id='hotspot_btn_icon' style="cursor:pointer;" title="Check eligibility for new hotspot" height="24"
+                                width="24" src="assets/hotspot.png"></a>
                         </button>
                         <button style="border: none;" id='add_btn' class="button">
                             <img id='add_btn_icon' style="cursor:pointer;" title="Add new hotspot" height="24"
@@ -80,31 +66,6 @@
                                 <button class="button ml-1" id='cancel_btn' type="cancel" value="cancel">Cancel</button>
                             </span>
                         </div>
-                    </div>
-                    <div style="text-align: center; display: none;" id="check_hotspot_eligibility_div">
-                        <h3><b>Check to see hotspot eligibility!</b></h3>
-
-                        <span class='mr-6' style="font-size: 1.05em;" id='nearby_hotspot_status'></span><br />
-                        <a id='emrit_hotspot_link' class="is-hidden">Get a free Hotspot</a>
-
-                        <div class="row">
-                            <div class="form-group">
-                                <input type="hidden" id="nearby_hotspots" name="nearby_hotspots" class="form-control"
-                                    placeholder="Nearby Hotspots" value="N/A" />
-                                <input type="hidden" id="latitude" name="latitude" class="form-control"
-                                    placeholder="Latitude" value="0.00" />
-                                <input type="hidden" id="longitude" name="longitude" class="form-control"
-                                    placeholder="Longitude" value="0.00" />
-                            </div>
-                        </div>
-
-                        <input
-                            id="pac-input"
-                            class="controls"
-                            type="text"
-                            placeholder="Search Box"
-                        />
-                        <div id="map" style="text-align:center; height:20em; width:100%;"></div>
                     </div>
 
                     <div style="text-align: center">

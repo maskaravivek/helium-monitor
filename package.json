@@ -1,0 +1,89 @@
+{
+  "name": "helium-monitor",
+  "version": "1.7.2",
+  "description": "Helium hotspot monitor",
+  "homepage": "https://github.com/maskaravivek/helium-monitor",
+  "main": "myApp.js",
+  "productName": "Helium Monitor",
+  "repository": "https://github.com/maskaravivek/helium-monitor",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "install-app-deps",
+    "start": "npm install && electron ./app",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist-mac": "electron-builder && bash build/resignAndPackage.sh",
+    "dist-all": "electron-builder -mwl"
+  },
+  "build": {
+    "appId": "com.maskaravivek.heliummonitor",
+    "files": [
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/build/**",
+      "!**/mainprocess/**",
+      "!**/src/**",
+      "!.gitignore",
+      "!package-lock.json"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "hardenedRuntime": false,
+      "icon": "build/icon.icns",
+      "target": "mas",
+      "provisioningProfile": "build/embedded.provisionprofile",
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "type": "distribution"
+    },
+    "linux": {
+      "maintainer": "Vivek Maskara",
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
+  },
+  "author": "vivek maskara, <maskaravivek@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "electron-debug": "^3.2.0",
+    "menubar": "^9.0.4",
+    "universal-analytics": "^0.4.23",
+    "update-electron-app": "^2.0.1"
+  },
+  "devDependencies": {
+    "electron": "^12.0.7",
+    "electron-builder": "^22.10.5",
+    "electron-packager": "^15.2.0"
+  }
+}

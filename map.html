@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Helium Monitor</title>
+    <link rel="stylesheet" href="css/bulma.min.css">
+    <link rel="stylesheet" href="css/map.css">
+    <script type="text/javascript" src="scripts/map.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrAiZvSDHjw6fkLR-KQ40LztUmoXgXw5w&libraries=places&callback=initAutocomplete"></script>
+    <script>
+        function initAutocomplete() {
+            var latitude, longitude;
+
+            if("geolocation" in navigator) {
+                console.log('Location services available')
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    initMap(latitude, longitude);
+                }, function() {
+                    console.log("Location Services not enabled!")
+                    latitude  = -33.8688;
+                    longitude = 151.2195;
+                    initMap(latitude, longitude);
+                });
+            }
+            else {
+                console.log("Location Services not available!")
+                latitude  = -33.8688;
+                longitude = 151.2195;
+                initMap(latitude, longitude);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <section class="section">
+        <div class="container">
+            <div id='map-div'>
+                <div class='columns is-vcentered is-mobile'>
+                    <div class="is-size-4 mr-6">
+                        <a href="index.html"><button style="border: none;" id='home_btn' class="button">
+                            <img style="cursor:pointer;" title="Home" height="24" width="24" src="assets/home.png"></a>
+                        </button>
+                        <span id='configtext'>Eligibility</span>
+                    </div>
+                </div>
+                <div>
+                    <div style="text-align: center;" id="check_hotspot_eligibility_div">
+                        <h3><b>Check to see hotspot eligibility!</b></h3>
+
+                        <span class='mr-6' style="font-size: 1.05em;" id='nearby_hotspot_status'></span><br />
+                        <a id='emrit_hotspot_link' class="is-hidden">Get a free Hotspot</a>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <input type="hidden" id="nearby_hotspots" name="nearby_hotspots" class="form-control"
+                                    placeholder="Nearby Hotspots" value="N/A" />
+                                <input type="hidden" id="latitude" name="latitude" class="form-control"
+                                    placeholder="Latitude" value="0.00" />
+                                <input type="hidden" id="longitude" name="longitude" class="form-control"
+                                    placeholder="Longitude" value="0.00" />
+                            </div>
+                        </div>
+
+                        <input
+                            id="pac-input"
+                            class="controls"
+                            type="text"
+                            placeholder="Search Box"
+                        />
+                        <div id="map" style="text-align:center; height:20em; width:100%;"></div>
+                    </div>
+
+                    <div style="text-align: center">
+                        <button id='coffee_btn'
+                            class="button is-half is-centered is-primary mt-6 has-text-centered is-hidden">
+                            <img width="128" src="assets/buy-me-a-coffee.png">
+                        </button> <br /><br />
+                        <a id='new_hotspot_link' class="is-hidden">Buy a new Hotspot</a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="scripts/require.js"></script>
+    <script src="scripts/map.js"></script>
+</body>
+
+
+</html>
