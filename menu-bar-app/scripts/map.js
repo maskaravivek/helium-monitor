@@ -1,3 +1,35 @@
+window.addEventListener('DOMContentLoaded', (event) => {
+    attachEventHandlers();
+});
+
+function attachEventHandlers() {
+    document.getElementById('nearby_hotspots').addEventListener("change", (event) => {
+        getHotspotsinRange(event.target.value)
+    });
+
+    if (!isElectronApp()) {
+        webSpecificEvents()
+    }
+}
+
+function isElectronApp() {
+    return navigator.userAgent.includes("Electron")
+}
+
+function webSpecificEvents() {
+    document.getElementById('coffee_btn').addEventListener("click", function () {
+        window.open("https://www.buymeacoffee.com/maskara", '_blank');
+    });
+
+    document.getElementById('new_hotspot_link').addEventListener("click", function () {
+        window.open("https://www.nebra.com/?ref=i0nmbh_csmsh", '_blank');
+    });
+
+    document.getElementById('emrit_hotspot_link').addEventListener("click", function () {
+        window.open("https://docs.google.com/forms/d/e/1FAIpQLScynuDQP9TR1a9_hpg89IkwIV_wrXA78NSSbRsz3w5HZ8uNYg/viewform", '_blank');
+    });
+}
+
 function initMap(latitude, longitude) {
     var geocoder = new google.maps.Geocoder();
 
@@ -140,12 +172,12 @@ function fetchURL(latitude, longitude, type, geocoder, markers, map) {
             return response.json();
         })
         .then((myJson) => {
-            element = document.getElementById('nearby_hotspots')
+            var element = document.getElementById('nearby_hotspots')
             element.value = JSON.stringify(myJson);
-            locations = {}
+            var locations = {}
             for (const [key, value] of Object.entries(myJson['data']))
             {   
-                loc_key = value.lat.toString() + ' - ' + value.lng.toString()
+                var loc_key = value.lat.toString() + ' - ' + value.lng.toString()
                 if (loc_key in locations) {
                     locations[loc_key]['count'] = locations[loc_key]['count'] + 1
                 }
@@ -181,4 +213,54 @@ function fetchURL(latitude, longitude, type, geocoder, markers, map) {
             var event = new Event('change');
             element.dispatchEvent(event);
         });
+}
+
+function getHotspotsinRange(val) {
+    var json = JSON.parse(val)
+    json = json['data']
+    var tot_hotspots = json.length;
+
+    var obj = json[0];
+
+    if (tot_hotspots == 0) {
+        var dist = 1000
+    }
+    else {
+        var lat1 = document.getElementById('latitude').value;
+        var lng1 = document.getElementById('longitude').value;
+        var lat2 = obj.lat;
+        var lng2 = obj.lng;
+
+        var dist = distance(lat1, lng1, lat2, lng2) * 1000
+    }
+
+    var nhs = "Number of hotspots nearby: " + String(tot_hotspots) + '<br />';
+    if (dist < 300) {
+        document.getElementById('emrit_hotspot_link').classList.add("is-hidden")
+        document.getElementById('nearby_hotspot_status').innerHTML = nhs + "You are not eligible for a hotspot! :(";
+    }
+    else {
+        document.getElementById('emrit_hotspot_link').classList.remove("is-hidden")
+        document.getElementById('nearby_hotspot_status').innerHTML = nhs + "You are eligible for a free hotspot! Sign up below to get yours now. :D";
+    }
+}
+
+function distance(lat1, lon1, lat2, lon2) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    }
+    else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var theta = lon1 - lon2;
+        var radtheta = Math.PI * theta / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515 * 1.609344;
+        return dist;
+    }
 }
