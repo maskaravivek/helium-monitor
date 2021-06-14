@@ -3,18 +3,6 @@ const path = require('path');
 const { app, ipcMain, autoUpdater } = require('electron')
 process.env.GOOGLE_API_KEY = 'AIzaSyDrAiZvSDHjw6fkLR-KQ40LztUmoXgXw5w'
 
-// const { app, BrowserWindow } = require('electron')
-
-// const debug = require('electron-debug');
-
-// debug();
-
-// let mainWindow;
-// (async () => {
-// 	await app.whenReady();
-// 	mainWindow = new BrowserWindow();
-// })();
-
 // const UPDATE_CHECK_INTERVAL = 10 * 60 * 1000
 
 // const server = "https://hazel-ten-rho.vercel.app"
@@ -61,9 +49,9 @@ mb.on('ready', () => {
   console.log('app is ready');
 });
 
-mb.on('after-create-window', () => {
-  mb.window.openDevTools()
-})
+// mb.on('after-create-window', () => {
+//   mb.window.openDevTools()
+// })
 
 ipcMain.on('bmc-event', (event, arg) => {
   event.returnValue = 'Message received!'
