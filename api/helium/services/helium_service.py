@@ -3,6 +3,7 @@ from datetime import datetime
 import urllib
 from .bots.telegram import telegram_bot_sendtext
 from helium.cache import cache
+import multiprocessing as mp
 
 EMRIT_RATIO = 0.2
 
@@ -144,9 +145,20 @@ def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, cur
     return earnings
 
 
+device_wise_earnings = []
+def get_result(result):
+    device_wise_earnings.append(result)
+
+
 def get_multi_hotspot_earnings_v2(hotspots, currency):
-    device_wise_earnings = [get_hotspot_earnings_with_percentage_factor_v2(
-        hotspot_name, float(percent), currency=currency) for (hotspot_name, percent) in hotspots.items()]
+    num_workers = mp.cpu_count()
+    pool = mp.Pool(num_workers)
+
+    for (hotspot_name, percent) in hotspots.items():
+        pool.apply_async(get_hotspot_earnings_with_percentage_factor_v2, args = (hotspot_name, float(percent), currency), callback=get_result)
+    
+    pool.close()
+    pool.join()
 
     total_latest_window_earnings = 0.0
     total_last_day_earnings = 0.0
