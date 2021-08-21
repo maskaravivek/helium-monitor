@@ -4,6 +4,8 @@ import urllib
 from .bots.telegram import telegram_bot_sendtext
 from helium.cache import cache
 import multiprocessing as mp
+from multiprocessing.dummy import Pool as ThreadPool
+import itertools
 
 EMRIT_RATIO = 0.2
 
@@ -134,7 +136,6 @@ def get_multi_hotspot_earnings(hotspots):
     }
 
 
-@cache.memoize(300)
 def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, currency='usd'):
     earnings = get_hotspot_earnings(hotspot_name, currency=currency)
     earnings["latest_window"] = earnings["latest_window"] * percentage / 100
@@ -145,20 +146,19 @@ def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, cur
     return earnings
 
 
-device_wise_earnings = []
-def get_result(result):
-    device_wise_earnings.append(result)
-
-
 def get_multi_hotspot_earnings_v2(hotspots, currency):
     num_workers = mp.cpu_count()
-    pool = mp.Pool(num_workers)
 
+    pool = ThreadPool(num_workers)
+
+    hotspots_array = []
+    percent_array = []
     for (hotspot_name, percent) in hotspots.items():
-        pool.apply_async(get_hotspot_earnings_with_percentage_factor_v2, args = (hotspot_name, float(percent), currency), callback=get_result)
-    
-    pool.close()
-    pool.join()
+        hotspots_array.append(hotspot_name)
+        percent_array.append(percent)
+
+    device_wise_earnings = pool.starmap(get_hotspot_earnings_with_percentage_factor_v2, zip(
+        hotspots_array, percent_array, itertools.repeat(currency)))
 
     total_latest_window_earnings = 0.0
     total_last_day_earnings = 0.0
