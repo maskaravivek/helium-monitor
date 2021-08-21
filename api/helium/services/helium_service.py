@@ -155,7 +155,7 @@ def get_multi_hotspot_earnings_v2(hotspots, currency):
     percent_array = []
     for (hotspot_name, percent) in hotspots.items():
         hotspots_array.append(hotspot_name)
-        percent_array.append(percent)
+        percent_array.append(int(percent))
 
     device_wise_earnings = pool.starmap(get_hotspot_earnings_with_percentage_factor_v2, zip(
         hotspots_array, percent_array, itertools.repeat(currency)))
