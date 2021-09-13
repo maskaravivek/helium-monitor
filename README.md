@@ -2,35 +2,39 @@
 
 Tools for monitoring your helium hotspot miner. 
 
-## API
+## Apps
 
-- `/earnings`: for fetching hotspot's earnings
-- `/earnings-bot`: for sending hotspot's earnings to a bot of your choice. Currently telegram is supported. 
-
-## Menu bar app
-
-Cross platform app for monitoring your helium device. Works with macOS, Windows and Ubuntu. 
-
-### How to use?
-
-Grab the latest installer for your PC from [Github releases](https://github.com/maskaravivek/helium-monitor/releases/) and simply install it. 
-
-#### Installation issues
+Cross platform app for monitoring your helium device. Available for macOS, Windows, Ubuntu, Web and also as a Chrome browser extension. 
 
 **Mac** 
 
-The apps haven't been signed since I don't have an active developer account. If there's enough interest, I will release a signed version. 
+https://apps.apple.com/us/app/helium-monitor/id1568899378
 
-Until then, depending on your preferences, you might have to manually click on **Open anyway** from **Security & Privacy**. These links([here](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac) and [here](https://support.apple.com/en-us/HT202491)) might be helpful. 
+**Chrome Extension**
+
+https://chrome.google.com/webstore/detail/helium-monitor/cieamegdfdimhcgokefagiojjidlpbih
+
+**Website**
+
+https://myhelium.info/
+
+**Windows/Linux**
+
+Grab the latest installer for your PC from [Github releases](https://github.com/maskaravivek/helium-monitor/releases/) and simply install it. 
+
+## APIs
+
+Consumable APIs available for custom usecases: 
+
+https://rapidapi.com/maskaravivek1/api/helium-monitor/
 
 ### Screenshot
 
 ![Mac Screenshot](screenshots/mac.png)
 
+## Support us
 
-## Support me
-
-If you found this tool useful and want to support me, you can buy me a coffee. :)
+If you found this tool useful and want to support us([@maskaravivek](https://github.com/maskaravivek/) & [@Raul9595](https://github.com/Raul9595)), you can buy us a coffee. :)
 
 [<img src="menu-bar-app/assets/bmc-yellow.png" alt="drawing" width="160"/>](https://www.buymeacoffee.com/maskara)
 ## Disclaimer
