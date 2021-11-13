@@ -50,20 +50,23 @@ def earnings_summary(hotspot_id, duration_in_days=30):
 
     last_day = 0
     last_7_days = 0
+    current_month_earnings = 0
+    current_month = 0
     total = 0
 
-    idx = 0
-    for item in resp_data:
+    for idx, item in enumerate(resp_data):
         if item['total'] > 0.0:
             if idx == 0:
                 last_day += item['total']
+                current_month = item['timestamp'].split('-')[1]
+                current_month_earnings += item['total']
             if idx < 7:
                 last_7_days += item['total']
+            if (idx != 0) and (item['timestamp'].split('-')[1] == current_month):
+                current_month_earnings += item['total']
             total += item['total']
 
-        idx += 1
-
-    return last_day, last_7_days, total
+    return last_day, last_7_days, current_month_earnings, total
 
 
 def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summary_duration_in_days=30, currency='usd'):
@@ -76,7 +79,7 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
 
     last_window_earnings = latest_earnings(
         hotspot_id, duration_in_hours=latest_earnings_duration_in_hours)
-    last_day_earnings, last_7_days_earnings, summary_earnings = earnings_summary(
+    last_day_earnings, last_7_days_earnings, current_month_earnings, summary_earnings = earnings_summary(
         hotspot_id, duration_in_days=summary_duration_in_days)
 
     price = get_price(currency)
@@ -86,6 +89,7 @@ def get_hotspot_earnings(hotspot_name, latest_earnings_duration_in_hours=1, summ
         "last_day": last_day_earnings,
         "summary_window": summary_earnings,
         "7_days_window": last_7_days_earnings,
+        "current_month_window": current_month_earnings,
         'price': price,
         'device_details': hotspot_details
     }
@@ -98,6 +102,7 @@ def get_hotspot_earnings_with_emrit_factor(hotspot_name, is_emrit):
         earnings["last_day"] = earnings["last_day"] * EMRIT_RATIO
         earnings["summary_window"] = earnings["summary_window"] * EMRIT_RATIO
         earnings["7_days_window"] = earnings["7_days_window"] * EMRIT_RATIO
+        earnings["current_month_window"] = earnings["current_month_window"] * EMRIT_RATIO
 
     return earnings
 
@@ -110,6 +115,7 @@ def get_multi_hotspot_earnings(hotspots):
     total_last_day_earnings = 0.0
     total_summary_earnings = 0.0
     total_7_days_window_earnings = 0.0
+    total_current_month_earnings = 0.0
     price = 0.0
     device_status = []
 
@@ -118,6 +124,7 @@ def get_multi_hotspot_earnings(hotspots):
         total_last_day_earnings += device['last_day']
         total_summary_earnings += device['summary_window']
         total_7_days_window_earnings += device['7_days_window']
+        total_current_month_earnings += device['current_month_window']
         price = device['price']
         device_status.append(device['device_details']['status'])
 
@@ -129,6 +136,7 @@ def get_multi_hotspot_earnings(hotspots):
             "last_day": "%.2f" % total_last_day_earnings,
             "summary_window": "%.2f" % total_summary_earnings,
             "7_days_window": "%.2f" % total_7_days_window_earnings,
+            "current_month_window": "%.2f" % total_current_month_earnings,
             'price': price,
             'status': overall_status
         },
@@ -142,6 +150,7 @@ def get_hotspot_earnings_with_percentage_factor_v2(hotspot_name, percentage, cur
     earnings["last_day"] = earnings["last_day"] * percentage / 100
     earnings["summary_window"] = earnings["summary_window"] * percentage / 100
     earnings["7_days_window"] = earnings["7_days_window"] * percentage / 100
+    earnings["current_month_window"] = earnings["current_month_window"] * percentage / 100
 
     return earnings
 
@@ -164,6 +173,7 @@ def get_multi_hotspot_earnings_v2(hotspots, currency):
     total_last_day_earnings = 0.0
     total_summary_earnings = 0.0
     total_7_days_window_earnings = 0.0
+    total_current_month_earnings = 0.0
     price = 0.0
     device_status = []
 
@@ -172,6 +182,7 @@ def get_multi_hotspot_earnings_v2(hotspots, currency):
         total_last_day_earnings += device['last_day']
         total_summary_earnings += device['summary_window']
         total_7_days_window_earnings += device['7_days_window']
+        total_current_month_earnings += device['current_month_window']
         price = device['price']
         device_status.append(device['device_details']['status'])
 
@@ -183,6 +194,7 @@ def get_multi_hotspot_earnings_v2(hotspots, currency):
             "last_day": "%.2f" % total_last_day_earnings,
             "summary_window": "%.2f" % total_summary_earnings,
             "7_days_window": "%.2f" % total_7_days_window_earnings,
+            "current_month_window": "%.2f" % total_current_month_earnings,
             'price': price,
             'status': overall_status
         },
