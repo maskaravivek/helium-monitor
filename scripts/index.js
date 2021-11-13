@@ -402,7 +402,7 @@ function displayEarnings() {
     const last_1_hour = parseFloat(data['latest_window']);
     const last_24_hours = parseFloat(data['last_day']);
     const last_7_days = parseFloat(data['7_days_window']);
-    // const current_month = parseFloat(data['current_month_window']);
+    const current_month = parseFloat(data['current_month_window']);
     const last_30_days = parseFloat(data['summary_window']);
     const price = parseFloat(data['price'])
     const currency_symbol = getActiveCurrencySymbol()
@@ -426,8 +426,8 @@ function displayEarnings() {
     document.getElementById('last-7-day-window-hnt').innerHTML = `${last_7_days.toFixed(2)} HNT`;
     document.getElementById('last-7-day-window-usd').innerHTML = `${currency_symbol} ${(last_7_days * price).toFixed(2)}`;
 
-    // document.getElementById('current-month-window-hnt').innerHTML = `${current_month.toFixed(2)} HNT`;
-    // document.getElementById('current-month-window-usd').innerHTML = `${currency_symbol} ${(current_month * price).toFixed(2)}`;
+    document.getElementById('current-month-window-hnt').innerHTML = `${current_month.toFixed(2)} HNT`;
+    document.getElementById('current-month-window-usd').innerHTML = `${currency_symbol} ${(current_month * price).toFixed(2)}`;
 
     document.getElementById('summary-window-hnt').innerHTML = `${last_30_days.toFixed(2)} HNT`;
     document.getElementById('summary-window-usd').innerHTML = `${currency_symbol} ${(last_30_days * price).toFixed(2)}`;
