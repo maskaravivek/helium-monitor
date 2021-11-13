@@ -237,7 +237,7 @@ def send_earning_update_to_telegram(hotspot_name, token, chat_id):
 
     if float(earnings["latest_window"]) > 0:
         message = "You earned {latest_window} HNT in last 1 hour. \n\n Summary: \n Last 24 hours: {last_day} HNT \n Last 7 days: {last_7_day} HNT \n Last 30 days: {summary_window} HNT".format(
-            latest_window=earnings["latest_window"], last_day=earnings["last_day"], last_7_day=earnings["7_days_window"], summary_window=earnings["summary_window"])
+            latest_window=earnings["latest_window"], last_day=earnings["last_day"], last_7_day=earnings["7_days_window"], current_month_earnings=earnings["current_month_window"], summary_window=earnings["summary_window"])
         telegram_bot_sendtext(token, chat_id, message)
 
     return {"status": "success"}
