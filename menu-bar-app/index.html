@@ -15,10 +15,6 @@
 
         gtag('config', 'G-5H6RXLRZJ9');
     </script>
-    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-        data-id="maskara" data-description="Support me on Buy me a coffee!" data-message="" data-color="#ff813f"
-        data-position="Right" data-x_margin="18" data-y_margin="18"></script>
-
 
 </head>
 
@@ -92,13 +88,6 @@
                         <img id='status_icon' style="cursor:pointer;" title="Device status" height="16" width="16"
                             src="assets/unknown.png">
                     </div>
-                    <div class="column">
-                        <div class="select is-small is-info is-rounded">
-                            <select style="width: 160px;" id='device_select'>
-                                <option>All devices</option>
-                            </select>
-                        </div>
-                    </div>
                     <div style="text-align: right;" class='column'>
                         <button style="width: 56px; border: none;" id='refresh_btn' class="button is-loading">
                             <img id='refresh_btn_icon' height="24" width="24" src="assets/refresh.png">
@@ -111,30 +100,41 @@
                         </button>
                     </div>
                 </div>
-
-                <div class="box has-text-centered">
-                    <span class='mr-6' style="font-size: 1.3em;" id='last-day-window-usd'></span>
-                    <span class='ml-6' style="font-size: 1.3em;" id='last-day-window-hnt'></span><br />
-                    <span style="font-size: 0.6em; color: green;" id='last-1-hour-hnt'></span><br />
-                    <span style="font-size: 0.5em;">Last 24 hours</span>
+                <div style="text-align: center;" class='column'>
+                    <div class="select is-small is-info is-rounded">
+                        <select style="width: 160px;" id='device_select'>
+                            <option>All devices</option>
+                        </select>
+                    </div>
                 </div>
+
+                
                 <div class="columns is-mobile">
                     <div class="column">
-                        <div class="box has-text-centered">
+                        <div class="box has-text-centered"  style="border-radius: 25px;">
+                            <span style="font-size: 1.3em;" id='last-day-window-usd'></span><br />
+                            <span style="font-size: 0.7em;" id='last-day-window-hnt'></span><br />
+                            <span style="font-size: 0.5em;">Last 24 hours</span>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="box has-text-centered"  style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='last-7-day-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='last-7-day-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Last 7 days</span>
                         </div>
                     </div>
+                </div>
+                <div class="columns is-mobile">
                     <div class="column">
-                        <div class="box has-text-centered">
+                        <div class="box has-text-centered"  style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='current-month-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='current-month-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Current month</span>
                         </div>
                     </div>
                     <div class="column">
-                        <div class="box has-text-centered">
+                        <div class="box has-text-centered"  style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='summary-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='summary-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Last 30 days</span>
