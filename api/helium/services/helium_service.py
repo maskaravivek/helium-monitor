@@ -51,14 +51,16 @@ def earnings_summary(hotspot_id, duration_in_days=30):
     last_day = 0
     last_7_days = 0
     current_month_earnings = 0
-    current_month = 0
+    try:
+        current_month = resp_data[0]['timestamp'].split('-')[1]
+    except:
+        current_month = 0
     total = 0
 
     for idx, item in enumerate(resp_data):
         if item['total'] > 0.0:
             if idx == 0:
                 last_day += item['total']
-                current_month = item['timestamp'].split('-')[1]
                 current_month_earnings += item['total']
             if idx < 7:
                 last_7_days += item['total']
