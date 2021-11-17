@@ -399,7 +399,6 @@ function displayEarnings() {
             }
         })
     }
-    const last_1_hour = parseFloat(data['latest_window']);
     const last_24_hours = parseFloat(data['last_day']);
     const last_7_days = parseFloat(data['7_days_window']);
     const current_month = parseFloat(data['current_month_window']);
@@ -411,13 +410,6 @@ function displayEarnings() {
         document.getElementById('status_icon').src = 'assets/offline.png';
     } else {
         document.getElementById('status_icon').src = 'assets/online.png';
-    }
-
-    if (last_1_hour > 0) {
-        document.getElementById('last-1-hour-hnt').style.display = 'block';
-        document.getElementById('last-1-hour-hnt').innerHTML = `+ ${last_1_hour.toFixed(2)} HNT`;
-    } else {
-        document.getElementById('last-1-hour-hnt').style.display = 'none';
     }
 
     document.getElementById('last-day-window-hnt').innerHTML = `${last_24_hours.toFixed(2)} HNT`;
