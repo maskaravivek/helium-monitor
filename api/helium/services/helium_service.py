@@ -1,6 +1,8 @@
 import requests
 from datetime import datetime
 import urllib
+
+from requests.api import head
 from .bots.telegram import telegram_bot_sendtext
 from helium.cache import cache
 import multiprocessing as mp
@@ -16,12 +18,14 @@ def latest_earnings(hotspot_id, duration_in_hours=1):
     time = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     to_time = urllib.parse.quote_plus(time)
 
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
     api_url = "https://api.helium.io/v1/hotspots/{hotspot_id}/rewards/sum?min_time={from_time}&max_time={to_time}&bucket=hour"
 
     api_url = api_url.format(hotspot_id=hotspot_id,
                              from_time=from_time, to_time=to_time)
 
-    r = requests.get(api_url)
+    r = requests.get(api_url, headers=headers)
 
     resp_data = r.json()['data']
 
@@ -39,12 +43,14 @@ def earnings_summary(hotspot_id, duration_in_days=30):
     time = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     to_time = urllib.parse.quote_plus(time)
 
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
     api_url = "https://api.helium.io/v1/hotspots/{hotspot_id}/rewards/sum?min_time={from_time}&max_time={to_time}&bucket=day"
 
     api_url = api_url.format(hotspot_id=hotspot_id,
                              from_time=from_time, to_time=to_time)
 
-    r = requests.get(api_url)
+    r = requests.get(api_url, headers=headers)
 
     resp_data = r.json()['data']
 
@@ -209,8 +215,9 @@ def get_hotspot_details(hotspot_name):
     api_url = "https://api.helium.io/v1/hotspots/name?search={hotspot_name}"
 
     api_url = api_url.format(hotspot_name=hotspot_name)
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
-    r = requests.get(api_url)
+    r = requests.get(api_url, headers= headers)
 
     resp_data = r.json()['data']
 
