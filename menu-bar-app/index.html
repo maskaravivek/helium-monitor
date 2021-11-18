@@ -19,30 +19,30 @@
 </head>
 
 <body>
-    <section class="section">
+    <section>
         <div class="container">
             <div id='configs-div'>
-                <div class='columns is-vcentered is-mobile'>
-                    <div class="is-size-4 mr-6">
-                        <button style="border: none;" id='home_btn' class="button">
+                <div class='columns is-vcentered is-mobile' style="background-color:#34568B;">
+                    <div class="is-size-4 m-4">
+                        <button style="border: none; background-color:#34568B;" id='home_btn' class="button">
                             <img style="cursor:pointer;" title="Home" height="24" width="24" src="assets/home.png">
                         </button>
-                        <span id='configtext'>Configure</span>
+                        <span id='configtext' style="color: azure; font-family:Georgia, 'Times New Roman', Times, serif;">Configure</span>
                     </div>
-                    <div style="text-align: right;" class='column ml-1'>
-                        <button style="border: none;" id='hotspot_btn' class="button">
+                    <div style="text-align: right;" class='column m-4'>
+                        <button style="border: none; background-color:#34568B;" id='hotspot_btn' class="button">
                             <a href="map.html"><img id='hotspot_btn_icon' style="cursor:pointer;"
                                     title="Check eligibility for new hotspot" height="24" width="24"
                                     src="assets/hotspot.png"></a>
                         </button>
-                        <button style="border: none;" id='add_btn' class="button">
+                        <button style="border: none; background-color:#34568B;" id='add_btn' class="button">
                             <img id='add_btn_icon' style="cursor:pointer;" title="Add new hotspot" height="24"
                                 width="24" src="assets/add.png">
                         </button>
                     </div>
                 </div>
                 <div>
-                    <div id='hotspot_div'>
+                    <div id='hotspot_div' class="ml-4">
                         <span class="is-size-7">Manage Hotspots</span><br /><br />
                         <div id='hotspot_list' class='tags'>
 
@@ -54,16 +54,18 @@
                             </select>
                         </div><br /><br />
                     </div>
-                    <div style="display: none;" id="add_new_hotspot_div">
+                    <div style="display: none;" id="add_new_hotspot_div" class='m-6'>
                         <div>
                             <input placeholder="Enter Hotspot Name. Eg. spare-fleece-urchin"
                                 class="input is-primary mt-3" type="text" id="hotspot_name" name="hotspot_name"><br />
                             <span style="font-size: 10px; color: red;" id="add_hotspot_error"></span><br />
                         </div>
                         <div>
-                            <span style="vertical-align: middle;">Your % share:</span> <input class="input is-primary"
-                                style="width: 40%;" id="percentage" type="number" min="0" max="100" value="100">
-                            <span style="float: right;">
+                            <input placeholder="Percentage Share" class="input is-primary"
+                                style="width: 40%; margin: auto; display: block;" id="percentage" type="number" min="0" max="100">
+                        </div>
+                        <div>
+                            <span style="display: flex; align-items: center; justify-content: center;" class='mt-4'>
                                 <button class="button is-primary" id='save_btn' type="save" value="save">Save</button>
                                 <button class="button ml-1" id='cancel_btn' type="cancel" value="cancel">Cancel</button>
                             </span>
@@ -73,29 +75,28 @@
                     <div style="text-align: center">
                         <button id='coffee_btn'
                             class="button is-half is-centered is-primary mt-6 has-text-centered is-hidden">
-                            <img width="128" src="assets/buy-me-a-coffee.png">
+                            <img width="0" src="assets/buy-me-a-coffee.png">
                         </button> <br /><br />
-                        <a id='new_hotspot_link' class="is-hidden">Buy a new Hotspot</a>
                     </div>
 
 
                 </div>
             </div>
             <div id='earnings-div'>
-                <div class='columns is-vcentered is-mobile'>
-                    <div class="column is-size-4">
-                        <span>Earnings</span>
+                <div class='columns is-vcentered is-mobile'  style="background-color:#34568B;">
+                    <div class="column is-size-4 m-4">
+                        <span  style="color: azure; font-family:Georgia, 'Times New Roman', Times, serif;">Earnings</span>
                         <img id='status_icon' style="cursor:pointer;" title="Device status" height="16" width="16"
                             src="assets/unknown.png">
                     </div>
-                    <div style="text-align: right;" class='column'>
-                        <button style="width: 56px; border: none;" id='refresh_btn' class="button is-loading">
+                    <div style="text-align: right;" class='column m-4'>
+                        <button style="width: 56px; border: none; background-color:#34568B;" id='refresh_btn' class="button is-loading">
                             <img id='refresh_btn_icon' height="24" width="24" src="assets/refresh.png">
                         </button>
-                        <button style="border: none;" id='web_btn' class="button">
+                        <button style="border: none; background-color:#34568B;" id='web_btn' class="button">
                             <img height="24" width="24" src="assets/globe.png">
                         </button>
-                        <button style="border: none;" class="button" id='edit_configs'>
+                        <button style="border: none; background-color:#34568B;" class="button" id='edit_configs'>
                             <img height="24" width="24" src="assets/settings.png">
                         </button>
                     </div>
