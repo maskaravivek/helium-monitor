@@ -85,14 +85,6 @@ function isElectronApp() {
 }
 
 function webSpecificEvents() {
-    document.getElementById('coffee_btn').addEventListener("click", function () {
-        window.open("https://www.buymeacoffee.com/maskara", '_blank');
-    });
-
-    document.getElementById('new_hotspot_link').addEventListener("click", function () {
-        window.open("https://www.nebra.com/?ref=i0nmbh_csmsh", '_blank');
-    });
-
     document.getElementById('web_btn').addEventListener("click", function () {
         let active_hotspot_id = localStorage.getItem('active_hotspot_id')
         window.open(`https://explorer.helium.com/hotspots/${active_hotspot_id}`, '_blank');
@@ -233,12 +225,9 @@ function fetchAppConfigsAndDisplay() {
         .then(response => response.json())
         .then(data => {
             populateCurrencies(data['currencies'])
-            displayConfigItems(data['configs'])
         })
         .catch(err => {
             console.log(err)
-            document.getElementById('coffee_btn').classList.add('is-hidden')
-            document.getElementById('new_hotspot_link').classList.add('is-hidden')
         })
 }
 
@@ -252,17 +241,6 @@ function populateCurrencies(data) {
 
     currency_select.innerHTML = options.join('')
     currency_select.value = getActiveCurrency() + ',' + getActiveCurrencySymbol()
-}
-
-function displayConfigItems(data) {
-    let is_bmc_visible = data['show_bmc']
-    let referral_visible = data['show_referral']
-    if (is_bmc_visible) {
-        document.getElementById('coffee_btn').classList.remove('is-hidden')
-    }
-    if (referral_visible) {
-        document.getElementById('new_hotspot_link').classList.remove('is-hidden')
-    }
 }
 
 function getHotspots() {
