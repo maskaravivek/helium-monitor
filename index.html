@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Helium Monitor</title>
     <link rel="stylesheet" href="css/bulma.min.css">
+    <link rel="stylesheet" href="css/index.css">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5H6RXLRZJ9"></script>
     <script>
@@ -19,15 +20,16 @@
 </head>
 
 <body>
-    <section>
-        <div class="container">
+    <section class="section" >
+        <div class="container is-half is-vcentered is-centered box">
             <div id='configs-div'>
                 <div class='columns is-vcentered is-mobile' style="background-color:#34568B;">
                     <div class="is-size-4 m-4">
                         <button style="border: none; background-color:#34568B;" id='home_btn' class="button">
                             <img style="cursor:pointer;" title="Home" height="24" width="24" src="assets/home.png">
                         </button>
-                        <span id='configtext' style="color: azure; font-family:Georgia, 'Times New Roman', Times, serif;">Configure</span>
+                        <span id='configtext'
+                            style="color: azure; font-family:Georgia, 'Times New Roman', Times, serif;">Configure</span>
                     </div>
                     <div style="text-align: right;" class='column m-4'>
                         <button style="border: none; background-color:#34568B;" id='hotspot_btn' class="button">
@@ -62,7 +64,8 @@
                         </div>
                         <div>
                             <input placeholder="Percentage Share" class="input is-primary"
-                                style="width: 40%; margin: auto; display: block;" id="percentage" type="number" min="0" max="100">
+                                style="width: 40%; margin: auto; display: block;" id="percentage" type="number" min="0"
+                                max="100">
                         </div>
                         <div>
                             <span style="display: flex; align-items: center; justify-content: center;" class='mt-4'>
@@ -76,14 +79,16 @@
                 </div>
             </div>
             <div id='earnings-div'>
-                <div class='columns is-vcentered is-mobile'  style="background-color:#34568B;">
+                <div class='columns is-vcentered is-mobile' style="background-color:#34568B;">
                     <div class="column is-size-4 m-4">
-                        <span  style="color: azure; font-family:Georgia, 'Times New Roman', Times, serif;">Earnings</span>
+                        <span
+                            style="color: azure; font-family:Georgia, 'Times New Roman', Times, serif;">Earnings</span>
                         <img id='status_icon' style="cursor:pointer;" title="Device status" height="16" width="16"
                             src="assets/unknown.png">
                     </div>
                     <div style="text-align: right;" class='column m-4'>
-                        <button style="width: 56px; border: none; background-color:#34568B;" id='refresh_btn' class="button is-loading">
+                        <button style="width: 56px; border: none; background-color:#34568B;" id='refresh_btn'
+                            class="button is-loading">
                             <img id='refresh_btn_icon' height="24" width="24" src="assets/refresh.png">
                         </button>
                         <button style="border: none; background-color:#34568B;" id='web_btn' class="button">
@@ -102,17 +107,17 @@
                     </div>
                 </div>
 
-                
+
                 <div class="columns is-mobile">
                     <div class="column">
-                        <div class="box has-text-centered"  style="border-radius: 25px;">
+                        <div class="box has-text-centered" style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='last-day-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='last-day-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Last 24 hours</span>
                         </div>
                     </div>
                     <div class="column">
-                        <div class="box has-text-centered"  style="border-radius: 25px;">
+                        <div class="box has-text-centered" style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='last-7-day-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='last-7-day-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Last 7 days</span>
@@ -121,14 +126,14 @@
                 </div>
                 <div class="columns is-mobile">
                     <div class="column">
-                        <div class="box has-text-centered"  style="border-radius: 25px;">
+                        <div class="box has-text-centered" style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='current-month-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='current-month-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Current month</span>
                         </div>
                     </div>
                     <div class="column">
-                        <div class="box has-text-centered"  style="border-radius: 25px;">
+                        <div class="box has-text-centered" style="border-radius: 25px;">
                             <span style="font-size: 1.3em;" id='summary-window-usd'></span><br />
                             <span style="font-size: 0.7em;" id='summary-window-hnt'></span><br />
                             <span style="font-size: 0.5em;">Last 30 days</span>
